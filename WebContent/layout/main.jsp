@@ -11,8 +11,10 @@
 <body>
 
 	<!-- top 레이아웃 삽입 -->
-	<jsp:include page="/layout/topLayout.jsp" flush="false" />
+	<jsp:include page="topLayout.jsp" flush="false" />
 	<br />
+	
+	
 	<div class="container" style="margin-top: 30px">
 		<div class="row">
 			<div class="col-sm-4">
@@ -41,6 +43,6 @@
 
 			<br />
 			<!-- bottom 레이아웃 삽입 -->
-			<jsp:include page="/layout/bottomLayout.jsp" flush="false" />
+			<jsp:include page="bottomLayout.jsp" flush="false" />
 </body>
 </html>
