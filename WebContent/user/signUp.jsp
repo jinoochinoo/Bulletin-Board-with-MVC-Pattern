@@ -1,3 +1,4 @@
+<%@page import="java.io.PrintWriter" %>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"
 %>
@@ -6,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>JINWOO's MVC Board</title>
-
 </head>
 <body>
 
@@ -64,5 +64,38 @@
 			<br />
 			<!-- bottom 레이아웃 삽입 -->
 			<jsp:include page="/layout/bottomLayout.jsp" flush="false" />
+			
+			<!-- 회원가입 오류 출력 -->
+			<%String msg = null;
+			if(session.getAttribute("Msg") != null){
+				msg = (String)session.getAttribute("Msg");
+			}
+			
+			if(msg == "빈칸 오류"){
+				PrintWriter script = response.getWriter();
+				script.println("<script>");
+				script.println("alert('입력이 안 된 사항이 있습니다')");
+				script.println("</script>");
+				session.invalidate();
+			}
+			
+			else if(msg == "비밀번호 오류"){
+				PrintWriter script = response.getWriter();
+				script.println("<script>");
+				script.println("alert('비밀번호가 일치하지 않습니다')");
+				script.println("</script>");
+				session.invalidate();
+			}
+			
+			else if(msg == "아이디 오류"){
+				PrintWriter script = response.getWriter();
+				script.println("<script>");
+				script.println("alert('이미 존재하는 아이디입니다')");
+				script.println("</script>");
+				session.invalidate();
+			}
+			
+			%>
+			
 </body>
 </html>

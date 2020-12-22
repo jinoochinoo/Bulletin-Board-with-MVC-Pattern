@@ -1,3 +1,4 @@
+<%@ page import="user.SessionCheck" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"
 %>
@@ -30,7 +31,24 @@ navbar navbar-expand-sm bg-light justify-content-center"
 			alt="logo" style="width: 40px;"
 		>
 		</a>
-
+		<%
+		// 세션 및 쿠키 체크
+		Cookie[] cookie = request.getCookies(); 
+		boolean check = SessionCheck.loginCheck(session, cookie); // 저장된 세션, 쿠키 전달
+		// TRUE 받으면 로그인 상태
+		if(check){
+		%>
+				<!-- 로그인 후 Links -->
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="#">소개</a></li>
+			<li class="nav-item"><a class="nav-link" href="userInfo">회원정보</a></li>
+			<li class="nav-item"><a class="nav-link" href="logout">로그아웃</a></li>
+		</ul>
+		
+		<% // FALSE 받으면 로그아웃 상태
+		} else {
+		%>
+		
 		<!--  로그인 전 Links -->
 
 		<ul class="navbar-nav">
@@ -38,13 +56,11 @@ navbar navbar-expand-sm bg-light justify-content-center"
 			<li class="nav-item"><a class="nav-link" href="login">로그인</a></li>
 			<li class="nav-item"><a class="nav-link" href="signUp">회원가입</a></li>
 		</ul>
+		<% 
+		} 
+		%>
+		
 
-		<!-- 로그인 후 Links -->
-		<ul class="navbar-nav">
-			<li class="nav-item"><a class="nav-link" href="#">소개</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">게시판</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">회원정보</a></li>
-		</ul>
 	</nav>
 
 </body>

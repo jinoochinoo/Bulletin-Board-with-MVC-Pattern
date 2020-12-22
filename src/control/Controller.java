@@ -1,17 +1,28 @@
 package control;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import user.loginAction;
+import user.logoutAction;
+import user.signupAction;
+import user.userInfo;
+
 
 @WebServlet("/")
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
+	// command에서 리턴받을 종류
+	public static final int TRUE = 0;
+	public static final int FALSE = 1;
+	public static final int EXCEPT = 2;
+	
 	public Controller(){
 		super();
 	}
@@ -36,6 +47,7 @@ public class Controller extends HttpServlet {
 		String URI = TempURI[TempURI.length-1];
 		
 		String page = null; // 넘겨줄 페이지 문자열
+		Command command = null; // 실행 커멘드 클래스 담당할 인터페이스
 		
 		// 로그인 화면
 		if(URI.equals("login")) {
@@ -47,16 +59,71 @@ public class Controller extends HttpServlet {
 			page = "/user/signUp.jsp";
 		}
 		
+		/*  / / / / / / / / / / / / / / / / / / / / / 회원가입 부분   / / / / / / / / / / / / / / / / / */
 		// 회원가입 실행
 		else if(URI.equals("signUpAction")){
+			command = new signupAction(request);
+			int result = command.execute();
 			
-			page = "/user/signUpAction.jsp";
-			
-			System.out.println("컨트롤러 통과함");
-	}
+			// TRUE 뜨면 메인 화면으로
+			if(result == Controller.TRUE) {
+				page = "/user/login.jsp";
+			}
+			// FLASE 뜨면 로그인 페이지로
+			if(result == Controller.FALSE) {
+				page = "/user/signUp.jsp";
+			}
+			// EXCEPT 뜨면 에러 페이지로
+			if(result == Controller.EXCEPT)
+			page = "/exception/exception.jsp";
+			}
 		
 		else if(URI.equals("/exception")) {
 			page = "/exception/exception.jsp";
+		}
+		
+		/*  / / / / / / / / / / / / / / / / / / / / / 로그인 부분   / / / / / / / / / / / / / / / / / */
+
+		else if(URI.equals("loginAction")) {
+			command = new loginAction(request, response);
+			int result = command.execute();
+			
+			// 성공
+			if(result == Controller.TRUE) {
+				page = "/layout/main.jsp";
+			}
+			// 실패
+			else if(result == Controller.FALSE) {
+				page = "/user/login.jsp";
+			}
+			else {
+				page = "/exception/exception.jsp";
+			}
+		}
+		
+		/*  / / / / / / / / / / / / / / / / / / / / / 로그아웃 부분   / / / / / / / / / / / / / / / / / */
+
+		else if(URI.equals("logout")) {
+			command = new logoutAction(request, response);
+			int result = command.execute();
+			if(result == Controller.TRUE) {
+				page = "/layout/main.jsp";
+			} else {
+				page = "/exception/exception.jsp";
+			}
+		}
+		
+		/*  / / / / / / / / / / / / / / / / / / / / / 회원정보 부분   / / / / / / / / / / / / / / / / / */
+		
+		else if(URI.equals("userInfo")) {
+			command = new userInfo(request);
+			int result = command.execute();
+			
+			if(result == Controller.TRUE) {
+				page = "/user/userInfo.jsp";
+			} else {
+				page = "/exception/exception.jsp";
+			}
 		}
 		
 		// 나머지 URI 전부 첫화면으로 전송
