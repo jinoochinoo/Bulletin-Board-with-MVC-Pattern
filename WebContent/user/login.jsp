@@ -15,7 +15,7 @@
 	<jsp:include page="/layout/topLayout.jsp" flush="false" />
 	<br />
 
-	<div class="container">
+	<div class="container col-lg-4">
 		<h2>로그인</h2>
 		<form action="loginAction" method="post">
 			<div class="form-group">

@@ -5,8 +5,22 @@ public class UserDTO {
 	private String userID;
 	private String firstPassword;
 	private String secondPassword;
-	private String email;
+	private String emailID;
+	private String emailAddress;
+	private String gender;
 	
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 	public String getUserID() {
 		return userID;
 	}
@@ -25,11 +39,11 @@ public class UserDTO {
 	public void setSecondPassword(String secondPassword) {
 		this.secondPassword = secondPassword;
 	}
-	public String getEmail() {
-		return email;
+	public String getEmailID() {
+		return emailID;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmailID(String email) {
+		this.emailID = email;
 	}
 
 }

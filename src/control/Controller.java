@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import user.loginAction;
 import user.logoutAction;
 import user.signupAction;
+import user.userDeleteAction;
 import user.userInfo;
+import user.userUpdate;
 
 
 @WebServlet("/")
@@ -59,9 +61,18 @@ public class Controller extends HttpServlet {
 			page = "/user/signUp.jsp";
 		}
 		
+		// 회원정보 수정
+		else if(URI.equals("userUpdate")) {
+			page = "/user/userUpdate.jsp";
+		}
+		
+		// 게시판 화면
+
+		
 		/*  / / / / / / / / / / / / / / / / / / / / / 회원가입 부분   / / / / / / / / / / / / / / / / / */
 		// 회원가입 실행
 		else if(URI.equals("signUpAction")){
+			
 			command = new signupAction(request);
 			int result = command.execute();
 			
@@ -90,7 +101,7 @@ public class Controller extends HttpServlet {
 			
 			// 성공
 			if(result == Controller.TRUE) {
-				page = "/layout/main.jsp";
+				page = "/user/loginAction.jsp";
 			}
 			// 실패
 			else if(result == Controller.FALSE) {
@@ -113,7 +124,7 @@ public class Controller extends HttpServlet {
 			}
 		}
 		
-		/*  / / / / / / / / / / / / / / / / / / / / / 회원정보 부분   / / / / / / / / / / / / / / / / / */
+		/*  / / / / / / / / / / / / / / / / / / / / / 회원정보 조회  / / / / / / / / / / / / / / / / / */
 		
 		else if(URI.equals("userInfo")) {
 			command = new userInfo(request);
@@ -123,6 +134,34 @@ public class Controller extends HttpServlet {
 				page = "/user/userInfo.jsp";
 			} else {
 				page = "/exception/exception.jsp";
+			}
+		}
+		
+		/*  / / / / / / / / / / / / / / / / / / / / / 회원정보 수정  / / / / / / / / / / / / / / / / / */
+		
+		else if(URI.equals("userUpdateAction")) {
+
+			command = new userUpdate(request);
+			int result = command.execute();
+			
+			if(result == Controller.TRUE) {
+				page = "/user/updateAction.jsp";
+			} else {
+				page = "exception/exception.jsp";
+			}
+		}
+		
+		/*  / / / / / / / / / / / / / / / / / / / / / 회원정보 삭제  / / / / / / / / / / / / / / / / / */
+		
+		else if(URI.equals("userDelete")) {
+			
+			command = new userDeleteAction(request);
+			int result = command.execute();
+			
+			if(result == Controller.TRUE) {
+				page = "/layout/main.jsp";
+			} else {
+				page = "exception/exception.jsp";
 			}
 		}
 		

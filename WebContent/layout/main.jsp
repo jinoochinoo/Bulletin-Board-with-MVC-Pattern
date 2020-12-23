@@ -34,27 +34,17 @@
 	<div class="col-sm-8">
 			<div class="container">
 				<div class="jumbotron">
-					<h1>MVC 패턴 게시판 포트폴리오 소개</h1>
-					<h5>게시글 및 회원정보 CRUD 기능 구현에 초점을 맞춘 기본형 게시판.</h5>
+				  <h1 class="text-center">MVC 패턴 게시판</h1>
+					  <h1 class="text-center mt-4">CRUD 기능만 구현한 <small>기본형 게시판</small></h1>
+					  <h2 class="text-center">Model, Controller 부분은 <small>오라클, 서블릿!</small></h2>
+					  <h3 class="text-center">View, 이미지 부분은 <small>부트스트랩, 자바스크립트!</small></h3>
+					  <h4 class="text-center">자세한 제작 과정은 <small>소개 메뉴에서 확인해주쎄요!</small></h4>
+					  
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
-			<%
-			String msg = null;
-				if(session.getAttribute("Msg") != null){
-					msg = (String) session.getAttribute("Msg");
-				}
-				if(msg == "로그인 성공"){
-					PrintWriter script = response.getWriter();
-					script.println("<script>");
-					script.println("alert('로그인 성공!')");
-					script.println("</script>");
-				}
-						
-			%>
 			
 			<br />
 			<!-- bottom 레이아웃 삽입 -->

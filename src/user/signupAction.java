@@ -21,7 +21,9 @@ public class signupAction implements Command{
 		dto.setUserID(request.getParameter("userID"));
 		dto.setFirstPassword(request.getParameter("firstPassword"));
 		dto.setSecondPassword(request.getParameter("secondPassword"));
-		dto.setEmail(request.getParameter("email"));
+		dto.setEmailID(request.getParameter("emailID"));
+		dto.setEmailAddress(request.getParameter("emailAddress"));
+		dto.setGender(request.getParameter("gender"));
 	}
 	
 	@Override
@@ -36,7 +38,8 @@ public class signupAction implements Command{
 			return Controller.FALSE;
 		}
 		else if(dto.getUserID() == null || dto.getFirstPassword() == null ||
-				dto.getSecondPassword() == null || dto.getEmail() == null){
+				dto.getSecondPassword() == null || dto.getEmailID() == null || 
+				dto.getEmailAddress() == null || dto.getGender() == null){
 				session.setAttribute("Msg", "빈칸 오류");
 				return Controller.FALSE;
 			}

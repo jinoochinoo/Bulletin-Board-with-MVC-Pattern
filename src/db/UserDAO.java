@@ -55,12 +55,14 @@ public class UserDAO {
 				
 			// 아이디 존재하지 않을 때 등록절차 진행
 			} else if(check == Controller.FALSE) {
-		String sql = "insert into MVC_Board_User values (?, ?, ?)";
+		String sql = "insert into MVC_Board_User values (?, ?, ?, ?, ?)";
 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getUserID());
 			pstmt.setString(2, dto.getFirstPassword());
-			pstmt.setString(3, dto.getEmail());
+			pstmt.setString(3, dto.getSecondPassword());
+			pstmt.setString(4, dto.getEmailID() + "@" + dto.getEmailAddress());
+			pstmt.setString(5, dto.getGender());
 			
 			pstmt.executeUpdate();
 			conn.commit();
@@ -129,7 +131,7 @@ public class UserDAO {
 		return Controller.EXCEPT;
 	}
 	
-	/*  / / / / / / / / / / / / / / / / / / / / / 회원정보 부분   / / / / / / / / / / / / / / / / / */
+	/*  / / / / / / / / / / / / / / / / / / / / / 회원정보 조회   / / / / / / / / / / / / / / / / / */
 	
 	public int userInfo(HttpServletRequest request) {
 		
@@ -150,7 +152,9 @@ public class UserDAO {
 			while(rs.next()) {
 				dto.setUserID(rs.getString("userID"));
 				dto.setFirstPassword(replaceStar(rs.getString("firstPassword"), 2));
-				dto.setEmail(rs.getString("email"));
+				dto.setEmailID(rs.getString("emailID"));
+				dto.setEmailAddress(rs.getString("emailAddress"));
+				
 			}
 			// 세션에 dto 객체 추가하고 마무리
 			session.setAttribute("userInfo",dto);
@@ -176,7 +180,78 @@ public class UserDAO {
 		   }
 		   return returnStr;
 		 }
-	
+	 
+	 /*  / / / / / / / / / / / / / / / / / / / / / 회원정보 수정   / / / / / / / / / / / / / / / / / */
+	 
+	 public int userUpdate(HttpServletRequest request) {
+
+		 // request 기반으로 세션 호출;
+		 HttpSession session = request.getSession();
+		
+
+		
+		System.out.println("-- 새로 등록해야 할 데이터 --");
+		System.out.println(request.getParameter("firstPassword"));
+		System.out.println(request.getParameter("email"));
+		System.out.println(request.getParameter("userID"));
+		 
+		 String sql = "update MVC_Board_user set firstPassword = ?, email = ? where userID = ?";
+		 
+		 try {
+		 pstmt = conn.prepareStatement(sql);
+		 pstmt.setString(1,  request.getParameter("firstPassword"));
+		 pstmt.setString(2, request.getParameter("email"));
+		 pstmt.setString(3, request.getParameter("userID"));
+		 
+		 rs = pstmt.executeQuery();
+		 conn.commit();	 
+		
+		// 새로 데이터 담아줄 그릇 생성
+					UserDTO dto = new UserDTO();
+					System.out.println("그릇에 담아주기 직전");
+						dto.setUserID(request.getParameter("userID"));
+						dto.setFirstPassword(request.getParameter("firstPassword"));
+						dto.setEmailID(request.getParameter("emailID"));
+						dto.setEmailAddress(request.getParameter("emailAddress"));
+					
+					// 세션에 dto 객체 추가하고 마무리
+					session.setAttribute("userInfo", dto);
+					System.out.println("세션 등록 후 저장 직전");
+
+		 return Controller.TRUE;
+		 
+	 } catch(Exception e) {
+		 e.printStackTrace();
+		 return Controller.FALSE;
+	 }
+}	
+	 /*  / / / / / / / / / / / / / / / / / / / / / 회원정보 수정   / / / / / / / / / / / / / / / / / */
+	 
+	 public int userDelete(HttpServletRequest request) {
+		 
+			HttpSession session = request.getSession();
+		 
+		 String sql = "delete from MVC_Board_user where userID = ?";
+				 
+		 		System.out.println("request 객체 전달 확인");
+		 		System.out.println(session.getAttribute("userID"));
+		 
+				 try {
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, (String)session.getAttribute("userID"));
+					rs = pstmt.executeQuery();
+					
+					conn.commit();
+					request.getSession().invalidate();
+					return Controller.TRUE;
+					
+				 } catch(Exception e) {
+					 e.printStackTrace();
+					 return Controller.FALSE;
+				 }
+	 }
+	 
+	 
 	/*  / / / / / / / / / / / / / / / / / / / / / DB 관련 부분   / / / / / / / / / / / / / / / / / */
 /*
 	// DB 연결 
