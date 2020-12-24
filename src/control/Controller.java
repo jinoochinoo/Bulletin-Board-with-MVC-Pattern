@@ -48,6 +48,14 @@ public class Controller extends HttpServlet {
 		// 마지막 파일명만 남겨서 URI 생성
 		String URI = TempURI[TempURI.length-1];
 		
+		/*
+		// 넘어온 커맨드를 추출하는 과정 // 이렇게 URI 구할 수도 있음
+        String TempURI = request.getRequestURI();
+        int lastIndex = requestURI.lastIndexOf("/")+1;
+        String URI = requestURI.substring(lastIndex);
+        */
+		
+		
 		String page = null; // 넘겨줄 페이지 문자열
 		Command command = null; // 실행 커멘드 클래스 담당할 인터페이스
 		

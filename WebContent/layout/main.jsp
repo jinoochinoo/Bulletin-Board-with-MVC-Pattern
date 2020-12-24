@@ -20,9 +20,9 @@
 		<div class="row">
 			<div class="col-sm-4">
 				<h3>Some Links</h3>
-				<p>Github & Youtube URL for Portfolio</p>
+				<p>GitHub & Youtube URL for Portfolio</p>
 				<ul class="nav nav-pills flex-column">
-					<li class="nav-item"><a class="nav-link active" href="#">GitHub</a>
+					<li class="nav-item"><a class="nav-link active" href="https://github.com/jinoochinoo">https://github.com/jinoochinoo</a>
 					</li>
 					<li class="nav-item"><a class="nav-link" href="#">Youtube</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Disable</a></li>

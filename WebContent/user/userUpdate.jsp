@@ -23,13 +23,15 @@
 	<div class="container">
 		<form action="userUpdateAction" method="post">
 			<h2>회원정보 수정</h2>
-			<p>비밀번호, 이메일 주소를 수정할 수 있습니다.</p>
-			<table class="table">
-				<thead class="thead-dark">
+			<p>비밀번호, 이메일 주소 등을 수정할 수 있습니다.</p>
+			<table class="table" class="col-lg-12">
+				<thead class="thead-dark text-center">
 					<tr>
 						<th>아이디</th>
 						<th>비밀번호</th>
+						<th>비밀번호 확인</th>
 						<th>이메일</th>
+						<th>성별</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -45,10 +47,26 @@
 							>
 						</td>
 						<td>
-							<input type="email" class="form-control" placeholder="이메일을 입력하세요"
-								name="email" value="<%=dto.getEmail()%>"
+							<input type="password" class="form-control"
+								placeholder="확인 비밀번호를 입력하세요" name="secondPassword"
 							>
 						</td>
+						<td>
+							<input type="text" class="form-control" placeholder="이메일을 입력하세요"
+								name="emailID" value="<%=dto.getEmailID()%>"><h4 class="text-center">@</h4>
+								<select name="emailAddress" class="form-control">
+									<option>naver.com</option>
+									<option>daum.net</option>
+									<option>gmail.com</option>
+									<option>nate.com</option>
+						</select>
+						</td>
+						
+						<td>
+						<input type="radio" name="gender" value="male" class="form-control" checked><h6 class="text-center">남자</h6>
+						<input type="radio" name="gender" value="female" class="form-control"><h6 class="text-center">여자</h6>
+						</td>
+						
 					</tr>
 				</tbody>
 			</table>

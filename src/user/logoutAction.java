@@ -35,7 +35,7 @@ public class logoutAction implements Command{
 		}
 		
 		// 세션 정보 받아서 삭제
-			request.getSession().invalidate();
+			request.getSession().removeAttribute("userID");
 		// 쿠키, 세션 다 삭제되면 TRUE 리턴
 			return Controller.TRUE;
 		} 

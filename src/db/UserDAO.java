@@ -25,8 +25,9 @@ public class UserDAO {
 	private HttpServletRequest request;
 	
 	// 기본 생성자
-	// UserDAO 실행될 때 자동으로 DB 연결
+	// UserDAO 실행될 때 자동으로 DB 연결 
 	public UserDAO() {
+		
 		try {
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		String dbURL = "jdbc:oracle:thin:@localhost:1521:orcl";
@@ -37,12 +38,9 @@ public class UserDAO {
 		} catch(Exception e) {
 		e.printStackTrace();
 		}
+		
 	}
-/*
-	public UserDAO(HttpServletRequest request) {
-		this.request = request;
-	}
-*/
+
 	/*  / / / / / / / / / / / / / / / / / / / / / 회원가입 부분   / / / / / / / / / / / / / / / / / */
 	// 회원가입 절차 진행
 	public int signUp(UserDTO dto) {
@@ -134,7 +132,7 @@ public class UserDAO {
 	/*  / / / / / / / / / / / / / / / / / / / / / 회원정보 조회   / / / / / / / / / / / / / / / / / */
 	
 	public int userInfo(HttpServletRequest request) {
-		
+			
 		// 세션에 저장된 데이터 활용 // HttpServletRequest request 통해 전달 받아야 함
 		HttpSession session = request.getSession();
 		
@@ -152,10 +150,12 @@ public class UserDAO {
 			while(rs.next()) {
 				dto.setUserID(rs.getString("userID"));
 				dto.setFirstPassword(replaceStar(rs.getString("firstPassword"), 2));
-				dto.setEmailID(rs.getString("emailID"));
-				dto.setEmailAddress(rs.getString("emailAddress"));
-				
+				dto.setSecondPassword(rs.getString("secondPassword"));
+				dto.setEmailID(rs.getString("email").substring(0, rs.getString("userID").length()));
+				dto.setEmailAddress(rs.getString("email").substring(rs.getString("userID").length()+1, rs.getString("email").length()));
+				dto.setGender(rs.getString("gender"));
 			}
+			
 			// 세션에 dto 객체 추가하고 마무리
 			session.setAttribute("userInfo",dto);
 			return Controller.TRUE;
@@ -187,74 +187,73 @@ public class UserDAO {
 
 		 // request 기반으로 세션 호출;
 		 HttpSession session = request.getSession();
-		
-
-		
-		System.out.println("-- 새로 등록해야 할 데이터 --");
-		System.out.println(request.getParameter("firstPassword"));
-		System.out.println(request.getParameter("email"));
-		System.out.println(request.getParameter("userID"));
-		 
-		 String sql = "update MVC_Board_user set firstPassword = ?, email = ? where userID = ?";
 		 
 		 try {
+			 
+		 String sql = "update MVC_Board_user set firstPassword = ?, secondPassword = ?,"
+		 		+ " email = ?, gender = ? where userID = ?";
+			 
 		 pstmt = conn.prepareStatement(sql);
 		 pstmt.setString(1,  request.getParameter("firstPassword"));
-		 pstmt.setString(2, request.getParameter("email"));
-		 pstmt.setString(3, request.getParameter("userID"));
-		 
+		 pstmt.setString(2, request.getParameter("secondPassword"));
+		 pstmt.setString(3, request.getParameter("emailID") + "@" + request.getParameter("emailAddress"));
+		 pstmt.setString(4, request.getParameter("gender"));
+		 pstmt.setString(5, request.getParameter("userID"));
 		 rs = pstmt.executeQuery();
+		 
 		 conn.commit();	 
 		
 		// 새로 데이터 담아줄 그릇 생성
 					UserDTO dto = new UserDTO();
-					System.out.println("그릇에 담아주기 직전");
+
 						dto.setUserID(request.getParameter("userID"));
 						dto.setFirstPassword(request.getParameter("firstPassword"));
+						dto.setSecondPassword(request.getParameter("secondPassword"));
 						dto.setEmailID(request.getParameter("emailID"));
 						dto.setEmailAddress(request.getParameter("emailAddress"));
+						dto.setGender(request.getParameter("gender"));
 					
 					// 세션에 dto 객체 추가하고 마무리
 					session.setAttribute("userInfo", dto);
-					System.out.println("세션 등록 후 저장 직전");
 
 		 return Controller.TRUE;
 		 
 	 } catch(Exception e) {
 		 e.printStackTrace();
-		 return Controller.FALSE;
-	 }
+	 } finally {
+		 dbClose();
+	 } return Controller.FALSE;
 }	
-	 /*  / / / / / / / / / / / / / / / / / / / / / 회원정보 수정   / / / / / / / / / / / / / / / / / */
+	 /*  / / / / / / / / / / / / / / / / / / / / / 회원정보 삭제   / / / / / / / / / / / / / / / / / */
 	 
 	 public int userDelete(HttpServletRequest request) {
 		 
 			HttpSession session = request.getSession();
 		 
 		 String sql = "delete from MVC_Board_user where userID = ?";
-				 
-		 		System.out.println("request 객체 전달 확인");
-		 		System.out.println(session.getAttribute("userID"));
 		 
 				 try {
 					pstmt = conn.prepareStatement(sql);
+					
+					// Attribute 값은 Object 반환이기에 (String) or toString() 통해서 형식 바꿔야 함
 					pstmt.setString(1, (String)session.getAttribute("userID"));
 					rs = pstmt.executeQuery();
 					
 					conn.commit();
-					request.getSession().invalidate();
+					request.getSession().removeAttribute("userID");
 					return Controller.TRUE;
 					
 				 } catch(Exception e) {
 					 e.printStackTrace();
-					 return Controller.FALSE;
-				 }
+				 } finally {
+					 dbClose();
+				 } return Controller.FALSE;
 	 }
 	 
 	 
 	/*  / / / / / / / / / / / / / / / / / / / / / DB 관련 부분   / / / / / / / / / / / / / / / / / */
 /*
-	// DB 연결 
+	// DB 연결 // 기본 생성자 통해 하기로 함
 	private void dbConnect() throws Exception {
 
 		context = new InitialContext();

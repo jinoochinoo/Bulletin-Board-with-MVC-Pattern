@@ -29,13 +29,15 @@
 					<th>아이디</th>
 					<th>비밀번호</th>
 					<th>이메일</th>
+					<th>성별</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td><%=dto.getUserID()%></td>
 					<td><%=dto.getFirstPassword()%></td>
-					<td><%=dto.getEmail()%></td>
+					<td><%=dto.getEmailID()%>@<%=dto.getEmailAddress()%></td>
+					<td><%=dto.getGender()%></td>
 				</tr>
 			</tbody>
 		</table>
