@@ -17,7 +17,7 @@
 
 	<div class="container col-lg-4">
 		<h2>로그인</h2>
-		<form action="loginAction" method="post">
+		<form action="loginAction.user" method="post">
 			<div class="form-group">
 				<label for="userID">아이디</label>
 				<input type="text" class="form-control" 

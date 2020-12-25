@@ -21,7 +21,7 @@
 	%>
 
 	<div class="container">
-		<form action="userUpdateAction" method="post">
+		<form action="userUpdateAction.user" method="post">
 			<h2>회원정보 수정</h2>
 			<p>비밀번호, 이메일 주소 등을 수정할 수 있습니다.</p>
 			<table class="table" class="col-lg-12">

@@ -18,7 +18,7 @@
 		<h2>회원가입</h2>
 		<div class="row">
 			<div class="container col-lg-6">
-				<form action="signUpAction" method="post">
+				<form action="signUpAction.user" method="post">
 
 					<div class="input-group mt-3 mb-1">
 						<div class="input-group-prpend">

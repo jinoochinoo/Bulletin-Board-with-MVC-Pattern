@@ -18,7 +18,7 @@
 					PrintWriter script = response.getWriter();
 					script.println("<script>");
 					script.println("alert('로그인 성공!')");
-					script.println("location.href='../layout/main.jsp'");
+					script.println("location.href='../main.jsp'");
 					script.println("</script>");
 				}
 						

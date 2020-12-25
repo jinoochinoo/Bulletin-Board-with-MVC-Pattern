@@ -47,18 +47,22 @@
 	<script type="text/javascript">
 		function button_event(){
 			if(confirm("정말 탈퇴하시겠습니까?") == true){ // 확인
-				document.form.submit();
+				document.delete.submit();
+				console.log("success");
 			} else { // 취소
-				return;
+				console.log("fail");
+				return false;
 			}
 		}
 	</script>
 
 	<!-- 수정, 삭제 버튼 -->
+	<form name="delete" action="userDelete.user" method="post">
 	<div class="text-center">
-		<a href="userUpdate" class="btn btn-primary">회원정보 수정</a>
-		<a href="userDelete" class="btn btn-secondary" onclick="button_event();">회원 탈퇴</a>
+		<a href="userUpdate.user" class="btn btn-primary">회원정보 수정</a>
+		<input type="button" class="btn btn-secondary" value="삭제하기" onclick="button_event();">
 	</div>
+	</form>
 	
 	<!-- bottom 레이아웃 삽입 -->
 	<br />

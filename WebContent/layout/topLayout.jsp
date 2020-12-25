@@ -11,8 +11,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--  부트스트랩 참조 -->
 <link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
->
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	
 </head>
 <body>
 
@@ -40,9 +40,9 @@ navbar navbar-expand-sm bg-light justify-content-center"
 		<!-- 로그인 후 Links -->
 		<ul class="navbar-nav">
 			<li class="nav-item"><a class="nav-link" href="dfdf">소개</a></li>
-			<li class="nav-item"><a class="nav-link" href="dfdf">게시판</a></li>
-			<li class="nav-item"><a class="nav-link" href="userInfo">회원정보</a></li>
-			<li class="nav-item"><a class="nav-link" href="logout">로그아웃</a></li>
+			<li class="nav-item"><a class="nav-link" href="boardList.board">게시판</a></li>
+			<li class="nav-item"><a class="nav-link" href="userInfo.user">회원정보</a></li>
+			<li class="nav-item"><a class="nav-link" href="logout.user">로그아웃</a></li>
 		</ul>
 
 		<%
@@ -53,9 +53,9 @@ navbar navbar-expand-sm bg-light justify-content-center"
 		<!--  로그인 전 Links -->
 		<ul class="navbar-nav">
 			<li class="nav-item"><a class="nav-link" href="dfdf">소개</a></li>
-			<li class="nav-item"><a class="nav-link" href="dfdf">게시판</a></li>
-			<li class="nav-item"><a class="nav-link" href="login">로그인</a></li>
-			<li class="nav-item"><a class="nav-link" href="signUp">회원가입</a></li>
+			<li class="nav-item"><a class="nav-link" href="boardList.board">게시판</a></li>
+			<li class="nav-item"><a class="nav-link" href="login.user">로그인</a></li>
+			<li class="nav-item"><a class="nav-link" href="signUp.user">회원가입</a></li>
 		</ul>
 		<%
 			}

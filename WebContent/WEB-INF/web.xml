@@ -12,5 +12,16 @@
         <listener-class>visit.VisitSessionListener</listener-class>
     </listener>
 
+<!-- 
+	<servlet>
+		<servlet-name>userController</servlet-name>
+		<servlet-class>control.Controller</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>userController</servlet-name>
+		<url-pattern>*.user</url-pattern>
+	</servlet-mapping>
+-->
 </web-app>
 
