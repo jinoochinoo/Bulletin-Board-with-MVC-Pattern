@@ -123,10 +123,10 @@ public class BoardDAO {
 				
 				String sql = "select * from "
 						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date) "
+						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
 						+ "from "
 						+ "(select * from MVC_board_board "
-						+ "order by bd_re_ref desc, bd_re_seq asc "
+						+ "order by bd_re_ref desc, bd_re_seq asc)) "
 						+ "where rnum >= ? and rnum <=?";
 				
 				pstmt = conn.prepareStatement(sql);
@@ -225,7 +225,48 @@ public class BoardDAO {
 	
 	// - - - - - - - - 총 게시글 수 가져오기 !! - - - - - - - - //
 	
-	
+	public int getBoardListCnt(HashMap<String, Object> listOpt) {
+		
+		int result = 0;
+		String opt = (String)listOpt.get("opt"); // 검색옵션(제목, 내용, 글쓴이 등..)
+		String condition = (String)listOpt.get("condition"); // 검색내용
+		
+		try {
+			if(opt == null) { // 전체 게시글 호출
+				
+				String sql = "select count(*) from MVC_Board_Board";
+				pstmt = conn.prepareStatement(sql);
+				
+			} else if(opt.equals("제목")) { // 제목 검색
+				String sql = "select count(*) from MVC_Board_Board where bd_title like ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%"+condition+"%");
+			} else if(opt.equals("내용")) { // 내용 검색
+				String sql = "select count(*) from MVC_Board_Board where bd_content like ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%"+condition+"%");
+			} else if(opt.equals("제목+내용")) {
+				String sql = "select count(*) from MVC_Board_Board where "
+						+ "bd_title like ? or bd_content like ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%"+condition+"%");
+				pstmt.setString(2, "%"+condition+"%");
+			} else if(opt.equals("글쓴이")) {
+				String sql = "select count(*) from MVC_Board_Board where bd_id like ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%"+condition+"%");
+			}
+			
+			rs = pstmt.executeQuery(); // SQL 실행 및 조건에 따른 게시글 수 담기
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+			
+		} catch(Exception e) {
+			System.out.println(" - - - - 전체 게시글 수 호출 오류 DAO  - - - - - ");
+			e.printStackTrace();
+		} return result;
+	}
 	
 	
 	// DB 해제

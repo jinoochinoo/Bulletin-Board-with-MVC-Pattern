@@ -46,27 +46,51 @@
       </tr>
     </thead>
     <tbody>
+    <c:forEach var="board" items="${sessionScope.list}">
       <tr class="text-center">
-        <td>0</td>
-        <td>임시글이라고요! 임시!!</td>
-        <td>진우쓰</td>
-        <td>2019-10-10</td>
-        <td>0</td>
-      </tr>      
+        <td>${board.bd_num}</td>
+        <td>
+        <a href="BoardDetailAction.board?num=${board.bd_num}&pageNum=${pageNum}">${board.bd_title}</a>
+        </td>
+        <td>${board.bd_id}</td>
+        <td>${board.bd_date}</td>
+        <td>${board.bd_cnt}</td>
+      </tr>
+      </c:forEach>
     </tbody>
   </table>
 </div>
 <br/>
-  <div id="topForm" class="text-center">
-  		<input type="button" class="btn btn-primary" value="글쓰기" onclick="writeForm()">
-  </div>
+
+	<c:if test="${sessionScope.userID!=null}">
+  		<div id="topForm" class="text-center">
+  			<input type="button" class="btn btn-primary" value="글쓰기" onclick="writeForm()">
+  		</div>
+ 	 </c:if>
+  
 <br/>
-<div id="pageForm" class="text-center">
-	페이지 번호
+<div id="pageForm" class="container">
+	<ul class="pagination justify-content-center">
+
+	 <c:if test="${startPage != 1}">
+            <li class="page-item"><a class="page-link" href='boardList.board?page=${startPage-1}'>Prev</a></li>
+        </c:if>
+        
+        <c:forEach var="pageNum" begin="${firstPage}" end="${fifthPage}">
+            <c:if test="${pageNum == startPage}">
+                <li class="page-item page-link text-dark" >${pageNum}&nbsp;</li>
+            </c:if>
+            <c:if test="${pageNum != startPage}">
+                <li class="page-item"><a class="page-link" href='boardList.board?page=${pageNum}'>${pageNum}&nbsp;</a></li>
+            </c:if>
+        </c:forEach>
+        
+        <c:if test="${fifthPage != maxPage }">
+           <li class="page-item"><a class="page-link" href='boardList.board?page=${fifthPage+1 }'>Next</a></li>
+        </c:if>
+
+	   </ul>
 </div>
-<br>
-
-
 
 	<br />
 	<!-- bottom 레이아웃 삽입 -->

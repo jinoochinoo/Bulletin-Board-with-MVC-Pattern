@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import board.boardList;
 import board.boardWriteAction;
 import user.loginAction;
 import user.logoutAction;
@@ -53,22 +54,32 @@ public class bdController extends HttpServlet {
 		String page = null; // 넘겨줄 페이지 문자열
 		Command command = null; // 실행 커멘드 클래스 담당할 인터페이스
 		
-		// 게시판리스트
+		// / / / / / / / / / / / / / / / / / / / / / 게시판리스트 /  / / / / / / / / / / / / / / / 
 		if(URI.equals("boardList.board")) {
-			page = "/board/boardList.jsp";
+			command = new boardList(request);
+			int result = command.execute();
+			
+			if(result == bdController.TRUE) {
+				page = "/board/boardList.jsp";
+			} else {
+				page = "/exception.exception.jsp";
+			}
 		}
-
+		
+		
+		// / / / / / / / / / / / / / / / 글쓰기 화면 이동 / / / / / / / / / / / / / / / /  
 		else if(URI.equals("boardWrite.board")) {
 			page = "/board/boardWrite.jsp";
 		}
 		
+		// / / / / / / / / / / / / / / / / / / 글쓰기 등록  / / / / / / / / / / / / / / / / / 
 		else if(URI.equals("boardWriteAction.board")) {
 			
 			command = new boardWriteAction(request);
 			int result = command.execute();
 			
 			if(result == Controller.TRUE) {
-				page="/board/boardList.jsp";
+				page="/boardList.board";
 			} else {
 				page = "/exception/exception.jsp";
 			}
