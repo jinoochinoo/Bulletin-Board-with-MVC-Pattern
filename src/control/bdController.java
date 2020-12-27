@@ -8,14 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import board.boardDetail;
 import board.boardList;
 import board.boardWriteAction;
-import user.loginAction;
-import user.logoutAction;
-import user.signupAction;
-import user.userDeleteAction;
-import user.userInfo;
-import user.userUpdate;
 
 
 @WebServlet("*.board")
@@ -56,6 +51,7 @@ public class bdController extends HttpServlet {
 		
 		// / / / / / / / / / / / / / / / / / / / / / 게시판리스트 /  / / / / / / / / / / / / / / / 
 		if(URI.equals("boardList.board")) {
+			
 			command = new boardList(request);
 			int result = command.execute();
 			
@@ -84,6 +80,21 @@ public class bdController extends HttpServlet {
 				page = "/exception/exception.jsp";
 			}
 		}
+		
+		// / / / / / / / / / / / / / / / / / / 게시글 상세보기  / / / / / / / / / / / / / / / / / 
+		
+		else if(URI.equals("BoardDetail.board")) {
+			
+			command = new boardDetail(request);
+			int result = command.execute();
+			
+			if(result == Controller.TRUE) {
+				page = "/board/boardDatail.jsp";
+			} else {
+				page = "/exception/exception.jsp";
+			}
+		}
+		
 		// 나머지 URI 전부 첫화면으로 전송
 		else {
 			page = "/main.jsp";

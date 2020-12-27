@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,6 +114,7 @@ public class BoardDAO {
 		String condition = (String)listOpt.get("condition"); // 검색 내용
 		int start = (Integer)listOpt.get("start"); // 현재 페이지번호
 		
+		
 		try {
 			
 			// 글목록 전체 보여줄 때
@@ -133,14 +135,14 @@ public class BoardDAO {
 				pstmt.setInt(1,  start);
 				pstmt.setInt(2,  start+9);
 			}
-			else if(opt.equals("제목")) { // 제목으로 검색
+			else if(opt.equals("0")) { // 제목으로 검색
 				
 				String sql = "select * from "
 						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date) "
+						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
 						+ "from "
 						+ "(select * from MVC_board_board where bd_title like ? "
-						+ "order by bd_re_ref desc, bd_re_seq asc "
+						+ "order by bd_re_ref desc, bd_re_seq asc)) "
 						+ "where rnum >= ? and rnum <=?";
 				
 				pstmt = conn.prepareStatement(sql);
@@ -149,14 +151,16 @@ public class BoardDAO {
 				pstmt.setInt(3,  start+9);
 				
 			}
-			else if(opt.equals("내용")) { // 내용으로 검색
+			else if(opt.equals("1")) { // 내용으로 검색
+				
+				System.out.println("BoardDAO opt==1 도착");
 				
 				String sql = "select * from "
 						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date) "
+						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
 						+ "from "
 						+ "(select * from MVC_board_board where bd_content like ? "
-						+ "order by bd_re_ref desc, bd_re_seq asc "
+						+ "order by bd_re_ref desc, bd_re_seq asc)) "
 						+ "where rnum >= ? and rnum <=?";
 				
 				pstmt = conn.prepareStatement(sql);
@@ -165,14 +169,14 @@ public class BoardDAO {
 				pstmt.setInt(3,  start+9);
 				
 			}
-			else if(opt.equals("제목+내용")) {
+			else if(opt.equals("2")) {
 				
 				String sql = "select * from "
 						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date) "
+						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
 						+ "from "
 						+ "(select * from MVC_board_board where bd_title like ? or bd_content like ? "
-						+ "order by bd_re_ref desc, bd_re_seq asc "
+						+ "order by bd_re_ref desc, bd_re_seq asc)) "
 						+ "where rnum >= ? and rnum <=?";
 				
 				pstmt = conn.prepareStatement(sql);
@@ -182,14 +186,14 @@ public class BoardDAO {
 				pstmt.setInt(4,  start+9);
 				
 			}
-			else if(opt.equals("글쓴이")) {
+			else if(opt.equals("3")) {
 				
 				String sql = "select * from "
 						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date) "
+						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
 						+ "from "
 						+ "(select * from MVC_board_board where bd_id like ? "
-						+ "order by bd_re_ref desc, bd_re_seq asc "
+						+ "order by bd_re_ref desc, bd_re_seq asc)) "
 						+ "where rnum >= ? and rnum <=?";
 				
 				pstmt = conn.prepareStatement(sql);
@@ -212,9 +216,12 @@ public class BoardDAO {
 				dto.setBd_re_lev(rs.getInt("bd_re_lev"));
 				dto.setBd_re_seq(rs.getInt("bd_re_seq"));
 				dto.setBd_date(rs.getDate("bd_date"));
+				
+
+				
 				list.add(dto);
 				
-			}
+			} 
 		} catch(Exception e) {
 			System.out.println(" - - - - - 게시글 조회 DAO 오류 - - - - - ");
 			e.printStackTrace();
@@ -237,21 +244,21 @@ public class BoardDAO {
 				String sql = "select count(*) from MVC_Board_Board";
 				pstmt = conn.prepareStatement(sql);
 				
-			} else if(opt.equals("제목")) { // 제목 검색
+			} else if(opt.equals("0")) { // 제목 검색
 				String sql = "select count(*) from MVC_Board_Board where bd_title like ?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, "%"+condition+"%");
-			} else if(opt.equals("내용")) { // 내용 검색
+			} else if(opt.equals("1")) { // 내용 검색
 				String sql = "select count(*) from MVC_Board_Board where bd_content like ?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, "%"+condition+"%");
-			} else if(opt.equals("제목+내용")) {
+			} else if(opt.equals("2")) {
 				String sql = "select count(*) from MVC_Board_Board where "
 						+ "bd_title like ? or bd_content like ?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, "%"+condition+"%");
 				pstmt.setString(2, "%"+condition+"%");
-			} else if(opt.equals("글쓴이")) {
+			} else if(opt.equals("3")) {
 				String sql = "select count(*) from MVC_Board_Board where bd_id like ?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, "%"+condition+"%");
@@ -268,6 +275,80 @@ public class BoardDAO {
 		} return result;
 	}
 	
+	// - - - - - - - - 게시글 상세보기 !! - - - - - - - - //
+	
+	public BoardDTO getDatil(int bd_num) {
+		
+		BoardDTO dto = null;
+		
+		try {
+			// bd_num 관련 파일 모두 조회
+			String sql = "select * from MVC_board_board where bd_num =?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bd_num);
+			rs = pstmt.executeQuery();
+			
+			// DTO 객체에 담기
+			if(rs.next()) {
+				dto = new BoardDTO();
+				dto.setBd_cnt(bd_num);
+				dto.setBd_id(rs.getString("bd_id"));
+				dto.setBd_title(rs.getString("bd_title"));
+				dto.setBd_content(rs.getString("bd_content"));
+				dto.setBd_file(rs.getString("bd_file"));
+				dto.setBd_cnt(rs.getInt("bd_cnt"));
+				dto.setBd_re_ref(rs.getInt("bd_re_ref"));
+				dto.setBd_re_lev(rs.getInt("bd_re_lev"));
+				dto.setBd_re_seq(rs.getInt("bd_re_seq"));
+				dto.setBd_date(rs.getDate("bd_date"));
+			}
+			
+		} catch(Exception e) {
+			System.out.println(" - - - - 글 상세보기 DAO 오류  - - - - - - ");
+			e.printStackTrace();
+			
+			// DTO 객체 반환
+		} return dto;
+	}
+	
+	// - - - - - - - - 조회수 증가 !! - - - - - - - - //
+	
+	public boolean updateCnt(int bd_num) {
+		
+		boolean result = false;
+		
+		try {
+			
+			String sql = "update MVC_board_board set bd_cnt = bd_cnt+1 where bd_num = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,  bd_num);
+			
+			// 결과값 체크
+			int flag = pstmt.executeUpdate();
+			
+			System.out.println("- - - - - flag 뭘로 나오는지 함 보자 - -  - ");
+			System.out.println(flag);
+			if(flag > 0) {
+				result = true;
+				conn.commit();
+			}
+			
+		} catch(Exception e) {
+			try { // 오류 발생 시 롤백 시도
+				conn.rollback();
+				
+			} catch(SQLException sqlE) {
+				System.out.println(" - - - - - 조회수 증가 roolback 오류 - - - - ");
+				sqlE.printStackTrace();
+			}
+			System.out.println(" - - - - - - - 조회수 증가 DAO 오류 - - - - - -  ");
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return result;
+	}
 	
 	// DB 해제
 	private void dbClose() {

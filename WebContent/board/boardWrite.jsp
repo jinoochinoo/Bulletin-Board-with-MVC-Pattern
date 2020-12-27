@@ -27,7 +27,7 @@
 	</td></tr>
 	<tr><td>
 		<textarea class="form-control text-center" rows="5" name="bdContent"
-			placeholder="내용을 입력해주세요"  style="text-align: center" required 
+			placeholder="내용을 입력해주세요" required 
 		></textarea>
 	</td></tr>
 	

@@ -23,14 +23,16 @@
   <h2 class="text-center">게시판</h2>
 
 <div id="searchForm" align="right">
-	<form>
+	<form action="boardList.board" method="post">
+		
 		<select name="opt" class="badge badge-pill badge-light">
-			<option value="0">제목</option>
-			<option value="1">내용</option>
-			<option value="2">제목+내용</option>
-			<option value="3">글쓴이</option>
+			<option value="0" <c:if test="${opt == 0}">selected</c:if>>제목</option>
+			<option value="1" <c:if test="${opt == 1}">selected</c:if>>내용</option>
+			<option value="2" <c:if test="${opt == 2}">selected</c:if>>제목+내용</option>
+			<option value="3" <c:if test="${opt == 3}">selected</c:if>>글쓴이</option>
 		</select>
-	  <input type="text" class="btn btn-outline-light text-dark col-sm-3" placeholder="Search">
+		
+	  <input type="text" class="btn btn-outline-light text-dark col-sm-3" placeholder="Search" name="condition">
 	  <button class="btn btn-success btn-sm" type="submit">Go</button>
 	</form>
 </div>
@@ -50,7 +52,7 @@
       <tr class="text-center">
         <td>${board.bd_num}</td>
         <td>
-        <a href="BoardDetailAction.board?num=${board.bd_num}&pageNum=${pageNum}">${board.bd_title}</a>
+        <a href="BoardDetail.board?num=${board.bd_num}&pageNum=${startPage}">${board.bd_title}</a>
         </td>
         <td>${board.bd_id}</td>
         <td>${board.bd_date}</td>
@@ -73,7 +75,7 @@
 	<ul class="pagination justify-content-center">
 
 	 <c:if test="${startPage != 1}">
-            <li class="page-item"><a class="page-link" href='boardList.board?page=${startPage-1}'>Prev</a></li>
+            <li class="page-item"><a class="page-link" href="boardList.board?page=${startPage-1}&condition=${condition}&opt=${opt}">Prev</a></li>
         </c:if>
         
         <c:forEach var="pageNum" begin="${firstPage}" end="${fifthPage}">
@@ -81,12 +83,12 @@
                 <li class="page-item page-link text-dark" >${pageNum}&nbsp;</li>
             </c:if>
             <c:if test="${pageNum != startPage}">
-                <li class="page-item"><a class="page-link" href='boardList.board?page=${pageNum}'>${pageNum}&nbsp;</a></li>
+                <li class="page-item"><a class="page-link" href="boardList.board?page=${pageNum}&condition=${condition}&opt=${opt}">${pageNum}&nbsp;</a></li>
             </c:if>
         </c:forEach>
         
         <c:if test="${fifthPage != maxPage }">
-           <li class="page-item"><a class="page-link" href='boardList.board?page=${fifthPage+1 }'>Next</a></li>
+           <li class="page-item"><a class="page-link" href="boardList.board?page=${fifthPage+1}&condition=${condition}&opt=${opt}">Next</a></li>
         </c:if>
 
 	   </ul>

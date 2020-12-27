@@ -34,13 +34,18 @@ public class boardList implements Command{
 		// 검색 조건과 내용 호출
 		String opt = request.getParameter("opt");
 		String condition = request.getParameter("condition");
-		
+
 		// 검색 조건과 내용 HashMap 담기
 		// 이름-값 호출로 훨씬 호출 쉽고, 따로 넘기는 게 아니라 Map 담아서 한꺼번에 옮겨서 편함
 		HashMap<String, Object> listOpt = new HashMap<String, Object>();
 		listOpt.put("opt", opt);
-		listOpt.put("conditon", condition);
+		listOpt.put("condition", condition);
 		listOpt.put("start",  startPage * 10 - 9);
+		
+		//검색값은 세션에 추가해서 list.jsp 뷰단에서 활용
+		HttpSession session = request.getSession();
+		session.setAttribute("opt", opt);
+		session.setAttribute("condition", condition);
 		
 		// DB 연결, 메소드 실행, 목록 및 게시글 수 받기
 		BoardDAO dao = new BoardDAO();
@@ -60,8 +65,6 @@ public class boardList implements Command{
 		if(firstPage<0) firstPage = 1;
 		
 		// JSP 뷰단까지 전달할 객체 세션에 저장
-		HttpSession session = request.getSession();
-		
 		// 각 페이지 번호 저장
 		session.setAttribute("startPage", startPage);
 		session.setAttribute("maxPage", maxPage);
