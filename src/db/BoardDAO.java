@@ -328,8 +328,7 @@ public class BoardDAO {
 			// 결과값 체크
 			int flag = pstmt.executeUpdate();
 			
-			System.out.println("- - - - - flag 뭘로 나오는지 함 보자 - -  - ");
-			System.out.println(flag);
+			// update 제대로 이뤄졌으면 flag 값 1 나와야 함
 			if(flag > 0) {
 				result = true;
 				conn.commit();

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import board.boardDetail;
 import board.boardList;
 import board.boardWriteAction;
+import board.fileDownload;
 
 
 @WebServlet("*.board")
@@ -89,10 +90,19 @@ public class bdController extends HttpServlet {
 			int result = command.execute();
 			
 			if(result == Controller.TRUE) {
-				page = "/board/boardDatail.jsp";
+				page = "/board/boardDetail.jsp";
 			} else {
 				page = "/exception/exception.jsp";
 			}
+		}
+		
+		// / / / / / / / / / / / / / / / / / / 파일 다운로드  / / / / / / / / / / / / / / / / / 
+		
+		else if(URI.equals("FileDownload.board")) {
+			
+			fileDownload fileDownload = new fileDownload(request, response);
+			fileDownload.download();
+			return;
 		}
 		
 		// 나머지 URI 전부 첫화면으로 전송

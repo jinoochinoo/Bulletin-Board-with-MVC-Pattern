@@ -8,6 +8,12 @@
 <head>
 <meta charset="UTF-8">
 <title>JINWOO's MVC Board</title>
+<script type="text/javascript">
+	function back(){
+		window.history.back();
+	}
+</script>
+
 </head>
 <body>
 
@@ -16,8 +22,7 @@
 	<br />
 	
 	
-
-<form action="boardWriteAction.board" method="post" name="boardWriteAction"  enctype="multipart/form-data">
+<form action="boardWriteAction.board" method="post" enctype="multipart/form-data">
 <input type="hidden" name="bdID" value="<%=session.getAttribute("userID")%>">
 <table class="container col-lg-7">
 
@@ -30,17 +35,17 @@
 			placeholder="내용을 입력해주세요" required 
 		></textarea>
 	</td></tr>
-	
+
 	<tr class="form-control" align="center">
 		<td id="title">파일첨부 &nbsp </td>
 		<td>
 		<input type="file" name="bdFile"/>
 		</td>
 	</tr>
-	
+
 	<tr class="text-center"><td>
 	<input type="submit" class="btn btn-primary mb-3" value="등록">
-	<input type="button" class="btn btn-secondary mb-3" value="취소">
+	<input type="button" class="btn btn-secondary mb-3" value="취소" onclick="back()">
 	</td></tr>
 	</table>
 </form>

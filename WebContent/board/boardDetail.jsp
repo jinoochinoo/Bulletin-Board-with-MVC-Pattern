@@ -30,10 +30,10 @@
 	    <td class="p-2 flex-fill bg-warning">${dto.bd_id}</td>
 	    <td class="p-2 flex-fill bg-primary">${dto.bd_cnt} hit</td>
   	</tr>
-	<tr><td class="form-control text-center">dfdf
+	<tr><td class="form-control text-center">
 			${dto.bd_title}
 	</td></tr>
-	<tr><td class="form-control text-center">dfdf
+	<tr><td class="form-control text-center">
 			${dto.bd_content}
 	</td></tr>
 	
