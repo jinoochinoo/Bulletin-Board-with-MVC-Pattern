@@ -8,8 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import board.boardDeleteAction;
 import board.boardDetail;
 import board.boardList;
+import board.boardPutAction;
+import board.boardReplyAction;
+import board.boardUpdateAction;
 import board.boardWriteAction;
 import board.fileDownload;
 
@@ -103,6 +107,67 @@ public class bdController extends HttpServlet {
 			fileDownload fileDownload = new fileDownload(request, response);
 			fileDownload.download();
 			return;
+		}
+		
+		// / / / / / / / / / / / / / / / / / / 댓글 작성  / / / / / / / / / / / / / / / / / 
+		
+		else if(URI.equals("BoardReplyAction.board")) {
+			
+			command = new boardReplyAction(request);
+			int result = command.execute();
+			
+			if(result == bdController.TRUE) {
+				page = "/boardList.board";
+			}
+			else {
+				page = "/exception/exception.jsp";
+			}
+		}
+		
+		// / / / / / / / / / / / / / / / / / / 게시글 삭제  / / / / / / / / / / / / / / / / / 
+			
+		else if(URI.equals("boardDeleteAction.board")) {
+			command = new boardDeleteAction(request);
+			int result = command.execute();
+			
+			if(result == bdController.TRUE) {
+				page = "/boardList.board";
+			} else {
+				page = "/exception/exception.jsp";
+			}
+		}
+		
+		// / / / / / / / / / / / / / / / / / / 게시글 수정  / / / / / / / / / / / / / / / / / 
+		
+		// 화면 이동
+		else if(URI.equals("boardUpdateAsk.board")) {
+			page = "/board/boardUpdate.jsp";
+		} 
+		
+		// 수정 절차 시작
+		else if(URI.equals("boardUpdateAction.board")) {
+			command = new boardUpdateAction(request);
+			int result = command.execute();
+
+			if(result == bdController.TRUE) {
+				page = "/boardList.board";
+			} else {
+				page = "/exception/exception.jsp";
+			}
+		}
+		
+		// / / / / / / / / / / / / / / / / / / 답글 작성  / / / / / / / / / / / / / / / / / 
+		
+		else if(URI.equals("boardPutAction.board")) {
+			System.out.println("최초 컨트롤러 도착");
+			command = new boardPutAction(request);
+			int result = command.execute();
+			System.out.println("컨트롤러 마지막 부분");
+			if(result == bdController.TRUE) {
+				page = "/boardList.board";
+			} else {
+				page = "/exception/exception.jsp";
+			}
 		}
 		
 		// 나머지 URI 전부 첫화면으로 전송

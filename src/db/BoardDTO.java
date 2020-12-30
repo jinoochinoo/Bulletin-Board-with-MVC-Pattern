@@ -15,7 +15,6 @@ public class BoardDTO {
 	private int bd_cnt;
 	private Date bd_date;
 	
-	
 	public int getBd_num() {
 		return bd_num;
 	}

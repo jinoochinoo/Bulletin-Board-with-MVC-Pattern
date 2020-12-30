@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 import control.Controller;
+import control.bdController;
 
 public class BoardDAO {
 
@@ -60,7 +61,7 @@ public class BoardDAO {
 			}
 			
 		} catch(Exception e) {
-			System.out.println("- - - 글쓰기 DAO 과정 실패 - - - ");
+			System.out.println("- - - seq 값 세팅 DAO 과정 실패 - - - ");
 			e.printStackTrace();
 		} return result;
 	}
@@ -84,9 +85,16 @@ public class BoardDAO {
 			pstmt.setString(3,  dto.getBd_title());
 			pstmt.setString(4, dto.getBd_content());
 			pstmt.setString(5,  dto.getBd_file());
-			pstmt.setInt(6, dto.getBd_num());
-			pstmt.setInt(7, 0);
-			pstmt.setInt(8, 0);
+			
+			//
+			if(dto.getBd_re_seq() == 0) { // 답변 글이 없을 경우
+				pstmt.setInt(6,  dto.getBd_num());
+			} else { // 답변 글이 있을 때
+				pstmt.setInt(6,  dto.getBd_re_ref());
+			}
+			
+			pstmt.setInt(7, dto.getBd_re_lev());
+			pstmt.setInt(8, dto.getBd_re_seq());
 			pstmt.setInt(9, 0);
 			
 			int flag = pstmt.executeUpdate();
@@ -98,8 +106,6 @@ public class BoardDAO {
 		} catch(Exception e) {
 			System.out.println(" - - - 글쓰기 DAO 실행 오류 - - - - ");
 			e.printStackTrace();
-		} finally {
-			dbClose();
 		} return Controller.EXCEPT;
 	}
 	
@@ -114,7 +120,6 @@ public class BoardDAO {
 		String condition = (String)listOpt.get("condition"); // 검색 내용
 		int start = (Integer)listOpt.get("start"); // 현재 페이지번호
 		
-		
 		try {
 			
 			// 글목록 전체 보여줄 때
@@ -127,7 +132,7 @@ public class BoardDAO {
 						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
 						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
 						+ "from "
-						+ "(select * from MVC_board_board "
+						+ "(select * from MVC_board_board where bd_title is not null "
 						+ "order by bd_re_ref desc, bd_re_seq asc)) "
 						+ "where rnum >= ? and rnum <=?";
 				
@@ -220,7 +225,7 @@ public class BoardDAO {
 
 				
 				list.add(dto);
-				
+
 			} 
 		} catch(Exception e) {
 			System.out.println(" - - - - - 게시글 조회 DAO 오류 - - - - - ");
@@ -292,7 +297,7 @@ public class BoardDAO {
 			// DTO 객체에 담기
 			if(rs.next()) {
 				dto = new BoardDTO();
-				dto.setBd_cnt(bd_num);
+				dto.setBd_num(bd_num);
 				dto.setBd_id(rs.getString("bd_id"));
 				dto.setBd_title(rs.getString("bd_title"));
 				dto.setBd_content(rs.getString("bd_content"));
@@ -344,11 +349,155 @@ public class BoardDAO {
 			}
 			System.out.println(" - - - - - - - 조회수 증가 DAO 오류 - - - - - -  ");
 			e.printStackTrace();
-		} finally {
-			dbClose();
 		} return result;
 	}
 	
+	// - - - - - - - - 댓글 작성시 Seq 값 증가 증가 !! - - - - - - - - //
+	
+	public int updateReSeq(BoardDTO dto) {
+		
+		// DB 저장된 게시글 담을 그릇
+			ArrayList<BoardDTO> reply = new ArrayList<BoardDTO>();
+			
+			int ref = dto.getBd_re_ref(); // 원본 게시글 번호(그룹번호)
+			int seq = dto.getBd_re_seq(); // 답변글 순서
+			
+			// 같은 게시글에 속한 기존 댓글 seq +1
+			try {
+				String sql = "update MVC_board_board set bd_re_seq = bd_re_seq+1 "
+						+ "where bd_re_ref = ? and bd_re_seq > ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,  ref);
+			pstmt.setInt(2,  seq);
+			pstmt.executeQuery();
+			
+			conn.commit();
+
+			return bdController.TRUE;
+			
+			} catch(Exception e) {
+				System.out.println(" - - - - - - 댓글 seq 값 증가 DAO 오류 - - - - - - - ");
+				e.printStackTrace();
+			} return bdController.FALSE; 	
+	}
+	
+	// - - - - - - - - 댓글 가져오기 !! - - - - - - - - //
+	
+
+	 public ArrayList<BoardDTO> getReplyList(BoardDTO dto){
+		 
+		 ArrayList<BoardDTO> reply = new ArrayList<BoardDTO>();
+		 
+		 try{
+		 	 String sql = "select * from MVC_board_board where bd_re_ref = ? and BD_TITLE is null "
+		 	 		+ "order by bd_re_seq asc";
+		 	 
+		 	 pstmt = conn.prepareStatement(sql);
+		 	 pstmt.setInt(1,  (Integer)dto.getBd_re_ref());
+		 	 rs = pstmt.executeQuery();
+		 	 
+		 	 // 가져온 값 담기
+		 	 while(rs.next()) {
+		 		 BoardDTO replyDTO = new BoardDTO();
+		 		 replyDTO.setBd_id(rs.getString("bd_id"));
+		 		 replyDTO.setBd_content(rs.getString("bd_content"));
+		 		 replyDTO.setBd_re_ref(rs.getInt("bd_re_ref"));
+		 		 replyDTO.setBd_re_lev(rs.getInt("bd_re_lev"));
+		 		 replyDTO.setBd_re_seq(rs.getInt("bd_re_seq"));
+		 
+		 		 reply.add(replyDTO);
+
+			 }
+		 	 
+		 } catch(Exception e) {
+			 System.out.println(" - - - - - 댓글 가져오기 DAO 오류 - - - - ");
+			 e.printStackTrace();
+			 
+		 }	 return reply;
+	 } 
+
+	// - - - - - - - - 파일명 호출 !! - - - - - - - - //
+	 
+	 public String getFileName(int bd_num) {
+		 String fileName = null;
+		 
+		 try {
+			 String sql = "select bd_file from MVC_board_board where "
+					 + "bd_num = ?";
+			 
+			 pstmt = conn.prepareStatement(sql);
+			 pstmt.setInt(1,  bd_num);
+			 rs = pstmt.executeQuery();
+			 
+			 if(rs.next()) {
+				 fileName = rs.getString("bd_file");
+			 }
+			 
+		 } catch(Exception e) {
+			 System.out.println(" - - - - - 파일호출 오류 - - - - -");
+			 e.printStackTrace();
+		 }
+		 return fileName;
+	 }
+	 
+	 // - - - - - - - - 게시글 삭제 !! - - - - - - - - //
+	 
+	 public int deleteBoard(int bd_num) {
+		 boolean result = false;
+		 
+		 try { // bd_num 통해 re_ref 넘버 조회 후 게시글과 댓글 한꺼번에 삭제
+			 String sql = "delete from MVC_board_board where bd_re_ref = ("
+			 		+ "select bd_re_ref from MVC_board_board where bd_num = ?)";
+			 
+			 pstmt = conn.prepareStatement(sql);
+			 pstmt.setInt(1, bd_num);
+			 rs = pstmt.executeQuery();
+			 conn.commit();
+			 
+			 return bdController.TRUE;
+					 
+		 } catch(Exception e) {
+			 System.out.println(" - - - - - - 게시글 삭제 DAO 오류 - - - - - ");
+			 e.printStackTrace();
+			 return bdController.FALSE;
+		 }
+	 }
+	 
+		// - - - - - - - - 글 수정 !! - - - - - - - - //
+	 
+	 public int updateBoard(BoardDTO dto) {
+		 int result = 0;
+		 
+		 try {
+			 String sql = "update MVC_board_board set bd_title = ?, bd_content = ?, "
+			 		+ "bd_file = ?, bd_date = sysdate where bd_num = ?";
+			 
+			 pstmt = conn.prepareStatement(sql);
+			 pstmt.setString(1,  dto.getBd_title());
+			 pstmt.setString(2, dto.getBd_content());
+			 pstmt.setString(3, dto.getBd_file());
+			 pstmt.setInt(4, dto.getBd_num());
+			 
+			 int flag = pstmt.executeUpdate();
+			 if(flag > 0) {
+				 result = bdController.TRUE;
+				 conn.commit();
+			 }
+			 
+		 } catch(Exception e) {
+			 result = bdController.FALSE;
+			 try {
+				 conn.rollback(); // 오류시 롤백
+			 } catch(Exception rollbackEx) {
+				 System.out.println(" - - - 롤백 시도 실패 - - -- ");
+				 rollbackEx.printStackTrace();
+			 }
+			 System.out.println(" - - - - - 글 수정 오류 DAO  - - - - - ");
+			 e.printStackTrace();
+		 } return result;
+	 } 	 
+	 
 	// DB 해제
 	private void dbClose() {
 		if(rs != null) {

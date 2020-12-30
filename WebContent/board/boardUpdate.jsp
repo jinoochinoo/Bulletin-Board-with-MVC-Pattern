@@ -21,21 +21,28 @@
 	<jsp:include page="../layout/topLayout.jsp" flush="false" />
 	<br />
 	
-<h1 class="text-center"><span class="badge badge-secondary">게시글 작성</span></h1>
-
-<form action="boardWriteAction.board" method="post" enctype="multipart/form-data">
+	
+<form action="boardUpdateAction.board?num=${dto.bd_num}&pageNum=${pageNum}" method="post" enctype="multipart/form-data">
 <input type="hidden" name="bdID" value="<%=session.getAttribute("userID")%>">
+<input type="hidden" name="bd_num" value="${dto.bd_num}">
+<input type="hidden" name="existing_file" value="${dto.bd_file}">
 <table class="container col-lg-7">
 
 	<tr><td>
 	<input type="text" name="bdTitle" class="form-control text-center"
-		placeholder="제목을 입력해주세요." required>
+		placeholder="${dto.bd_title}" required>
 	</td></tr>
 	<tr><td>
 		<textarea class="form-control text-center" rows="5" name="bdContent"
-			placeholder="내용을 입력해주세요" required 
-		></textarea>
+	 required>${dto.bd_content}</textarea>
 	</td></tr>
+
+	<tr class="form-control" align="center">
+		<td id="title">기존 파일 &nbsp </td>
+		<td>
+			${dto.bd_file}
+		</td>
+	</tr>
 
 	<tr class="form-control" align="center">
 		<td id="title">파일첨부 &nbsp </td>

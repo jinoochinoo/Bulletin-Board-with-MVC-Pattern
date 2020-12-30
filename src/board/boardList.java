@@ -33,7 +33,13 @@ public class boardList implements Command{
 		
 		// 검색 조건과 내용 호출
 		String opt = request.getParameter("opt");
+		if(opt == "") {
+			opt = null;
+		}
 		String condition = request.getParameter("condition");
+		if(condition == "") {
+			condition = null;
+		}
 
 		// 검색 조건과 내용 HashMap 담기
 		// 이름-값 호출로 훨씬 호출 쉽고, 따로 넘기는 게 아니라 Map 담아서 한꺼번에 옮겨서 편함
@@ -58,17 +64,19 @@ public class boardList implements Command{
 		// 전체 페이지 수
 		int maxPage = (int)(listCnt/10.0 + 0.9);
 		// 마지막 페이지
-		int fifthPage = startPage + 4;
+		int fifthPage = startPage + 2;
+		if(fifthPage < 5) fifthPage = 5;
 		if(fifthPage > maxPage) fifthPage = maxPage;
 		// 시작 페이지
-		int firstPage = fifthPage - 4;
-		if(firstPage<0) firstPage = 1;
+		int PagingStartPage = startPage - 2;
+		if(PagingStartPage<=0) PagingStartPage = 1;
+
 		
 		// JSP 뷰단까지 전달할 객체 세션에 저장
 		// 각 페이지 번호 저장
 		session.setAttribute("startPage", startPage);
 		session.setAttribute("maxPage", maxPage);
-		session.setAttribute("firstPage", firstPage);
+		session.setAttribute("PagingStartPage", PagingStartPage);
 		session.setAttribute("fifthPage", fifthPage);
 	
 		// 게시글 총 수, 게시글 목록 저장

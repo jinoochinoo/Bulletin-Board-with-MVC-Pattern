@@ -21,18 +21,23 @@
 	<jsp:include page="../layout/topLayout.jsp" flush="false" />
 	<br />
 	
-<h1 class="text-center"><span class="badge badge-secondary">게시글 작성</span></h1>
+	<h1 class="text-center"><span class="badge badge-secondary">답글 작성</span></h1>
+	
+<form action="boardPutAction.board" method="post" enctype="multipart/form-data">
+<input type="hidden" name="bd_id" value="<%=session.getAttribute("userID")%>">
+<input type="hidden" name="bd_num" value="<%=session.getAttribute("dto.bd_num")%>">
+<input type="hidden" name="bd_re_ref" value="<%=session.getAttribute("dto.bd_re_ref")%>">
+<input type="hidden" name="bd_re_lev" value="<%=session.getAttribute("dto.bd_re_lev")%>">
+<input type="hidden" name="bd_re_seq" value="<%=session.getAttribute("dto.bd_re_seq")%>">
 
-<form action="boardWriteAction.board" method="post" enctype="multipart/form-data">
-<input type="hidden" name="bdID" value="<%=session.getAttribute("userID")%>">
 <table class="container col-lg-7">
 
 	<tr><td>
-	<input type="text" name="bdTitle" class="form-control text-center"
+	<input type="text" name="bd_title" class="form-control text-center"
 		placeholder="제목을 입력해주세요." required>
 	</td></tr>
 	<tr><td>
-		<textarea class="form-control text-center" rows="5" name="bdContent"
+		<textarea class="form-control text-center" rows="5" name="bd_content"
 			placeholder="내용을 입력해주세요" required 
 		></textarea>
 	</td></tr>
