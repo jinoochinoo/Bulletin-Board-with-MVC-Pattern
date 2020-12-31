@@ -55,7 +55,7 @@
 					<tr class="text-center">
 						<td>${board.bd_num}</td>
 						<td align="left">
-							<c:if test="${board.bd_re_lev > 0}">
+							<c:if test="${board.bd_re_lev > 1}">
 								<c:forEach begin="1" end="${board.bd_re_lev}">
 								&nbsp;&nbsp; <!--  답변글 앞에 공백 추가 -->
 								</c:forEach>

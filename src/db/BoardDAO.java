@@ -75,8 +75,8 @@ public class BoardDAO {
 		try {
 			String sql = "insert into MVC_board_board"
 					+ "(bd_num, bd_id, bd_title, bd_content, bd_file, "
-					+ "bd_re_ref, bd_re_lev, bd_re_seq, bd_cnt, bd_date)"
-					+ " values(?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate)";
+					+ "bd_re_ref, bd_cnt, bd_parent, bd_date)"
+					+ " values(?, ?, ?, ?, ?, ?, ?, ?, sysdate)";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -85,17 +85,10 @@ public class BoardDAO {
 			pstmt.setString(3,  dto.getBd_title());
 			pstmt.setString(4, dto.getBd_content());
 			pstmt.setString(5,  dto.getBd_file());
-			
-			//
-			if(dto.getBd_re_seq() == 0) { // 답변 글이 없을 경우
-				pstmt.setInt(6,  dto.getBd_num());
-			} else { // 답변 글이 있을 때
-				pstmt.setInt(6,  dto.getBd_re_ref());
-			}
-			
-			pstmt.setInt(7, dto.getBd_re_lev());
-			pstmt.setInt(8, dto.getBd_re_seq());
-			pstmt.setInt(9, 0);
+			pstmt.setInt(6, dto.getBd_re_ref());
+			pstmt.setInt(7,  dto.getBd_cnt());
+			pstmt.setInt(8, dto.getBd_parent());
+
 			
 			int flag = pstmt.executeUpdate();
 			if(flag > 0) {
@@ -129,12 +122,15 @@ public class BoardDAO {
 				//글 10개 한 화면에 보여주도록 쿼리 설정
 				
 				String sql = "select * from "
-						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
-						+ "from "
-						+ "(select * from MVC_board_board where bd_title is not null "
-						+ "order by bd_re_ref desc, bd_re_seq asc)) "
-						+ "where rnum >= ? and rnum <=?";
+						+ "(select rownum as rnum, data.* from "
+						+ "(select level, bd_num, bd_id, bd_title, bd_content, bd_file, "
+						+ "bd_cnt, bd_re_ref, bd_parent, bd_date from "
+						+ "MVC_board_board "
+						+ "start with bd_parent = 0 "
+						+ "connect by prior bd_num = bd_parent "
+						+ "order SIBLINGS BY bd_re_ref desc) "
+						+ "data) "
+						+ "where rnum >= ? and rnum <= ?";
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1,  start);
@@ -143,12 +139,16 @@ public class BoardDAO {
 			else if(opt.equals("0")) { // 제목으로 검색
 				
 				String sql = "select * from "
-						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
-						+ "from "
-						+ "(select * from MVC_board_board where bd_title like ? "
-						+ "order by bd_re_ref desc, bd_re_seq asc)) "
-						+ "where rnum >= ? and rnum <=?";
+						+ "(select rownum as rnum, data.* from "
+						+ "(select level, bd_num, bd_id, bd_title, bd_content, bd_file, "
+						+ "bd_cnt, bd_re_ref, bd_parent, bd_date from "
+						+ "MVC_board_board "
+						+ "where bd_title like ?"
+						+ "start with bd_parent = 0 "
+						+ "connect by prior bd_num = bd_parent "
+						+ "order SIBLINGS BY bd_re_ref desc) "
+						+ "data) "
+						+ "where rnum >= ? and rnum <= ?";
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1,  "%"+condition+"%");
@@ -161,12 +161,16 @@ public class BoardDAO {
 				System.out.println("BoardDAO opt==1 도착");
 				
 				String sql = "select * from "
-						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
-						+ "from "
-						+ "(select * from MVC_board_board where bd_content like ? "
-						+ "order by bd_re_ref desc, bd_re_seq asc)) "
-						+ "where rnum >= ? and rnum <=?";
+						+ "(select rownum as rnum, data.* from "
+						+ "(select level, bd_num, bd_id, bd_title, bd_content, bd_file, "
+						+ "bd_cnt, bd_re_ref, bd_parent, bd_date from "
+						+ "MVC_board_board "
+						+ "where bd_content like ?"
+						+ "start with bd_parent = 0 "
+						+ "connect by prior bd_num = bd_parent "
+						+ "order SIBLINGS BY bd_re_ref desc) "
+						+ "data) "
+						+ "where rnum >= ? and rnum <= ?";
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1,  "%"+condition+"%");
@@ -177,12 +181,17 @@ public class BoardDAO {
 			else if(opt.equals("2")) {
 				
 				String sql = "select * from "
-						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
-						+ "from "
-						+ "(select * from MVC_board_board where bd_title like ? or bd_content like ? "
-						+ "order by bd_re_ref desc, bd_re_seq asc)) "
-						+ "where rnum >= ? and rnum <=?";
+						+ "(select rownum as rnum, data.* from "
+						+ "(select level, bd_num, bd_id, bd_title, bd_content, bd_file, "
+						+ "bd_cnt, bd_re_ref, bd_parent, bd_date from "
+						+ "MVC_board_board "
+						+ "where bd_title like ?"
+						+ "or bd_content like ?"
+						+ "start with bd_parent = 0 "
+						+ "connect by prior bd_num = bd_parent "
+						+ "order SIBLINGS BY bd_re_ref desc) "
+						+ "data) "
+						+ "where rnum >= ? and rnum <= ?";
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1,  "%"+condition+"%"); // 제목에 검색 내용이 있거나
@@ -194,12 +203,16 @@ public class BoardDAO {
 			else if(opt.equals("3")) {
 				
 				String sql = "select * from "
-						+ "(select rownum rnum, bd_num, bd_id, bd_title, bd_content, "
-						+ "bd_file, bd_cnt, bd_re_ref, bd_re_lev, bd_re_seq, bd_date "
-						+ "from "
-						+ "(select * from MVC_board_board where bd_id like ? "
-						+ "order by bd_re_ref desc, bd_re_seq asc)) "
-						+ "where rnum >= ? and rnum <=?";
+						+ "(select rownum as rnum, data.* from "
+						+ "(select level, bd_num, bd_id, bd_title, bd_content, bd_file, "
+						+ "bd_cnt, bd_re_ref, bd_parent, bd_date from "
+						+ "MVC_board_board "
+						+ "where bd_id like ?"
+						+ "start with bd_parent = 0 "
+						+ "connect by prior bd_num = bd_parent "
+						+ "order SIBLINGS BY bd_re_ref desc) "
+						+ "data) "
+						+ "where rnum >= ? and rnum <= ?";
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1,  "%"+condition+"%");
@@ -211,6 +224,7 @@ public class BoardDAO {
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				BoardDTO dto = new BoardDTO();
+				dto.setBd_re_lev(rs.getInt("level"));
 				dto.setBd_num(rs.getInt("bd_num"));
 				dto.setBd_id(rs.getString("bd_id"));
 				dto.setBd_title(rs.getString("bd_title"));
@@ -218,11 +232,8 @@ public class BoardDAO {
 				dto.setBd_file(rs.getString("bd_file"));
 				dto.setBd_cnt(rs.getInt("bd_cnt"));
 				dto.setBd_re_ref(rs.getInt("bd_re_ref"));
-				dto.setBd_re_lev(rs.getInt("bd_re_lev"));
-				dto.setBd_re_seq(rs.getInt("bd_re_seq"));
+				dto.setBd_parent(rs.getInt("bd_parent"));
 				dto.setBd_date(rs.getDate("bd_date"));
-				
-
 				
 				list.add(dto);
 
@@ -351,37 +362,7 @@ public class BoardDAO {
 			e.printStackTrace();
 		} return result;
 	}
-	
-	// - - - - - - - - 댓글 작성시 Seq 값 증가 증가 !! - - - - - - - - //
-	
-	public int updateReSeq(BoardDTO dto) {
-		
-		// DB 저장된 게시글 담을 그릇
-			ArrayList<BoardDTO> reply = new ArrayList<BoardDTO>();
-			
-			int ref = dto.getBd_re_ref(); // 원본 게시글 번호(그룹번호)
-			int seq = dto.getBd_re_seq(); // 답변글 순서
-			
-			// 같은 게시글에 속한 기존 댓글 seq +1
-			try {
-				String sql = "update MVC_board_board set bd_re_seq = bd_re_seq+1 "
-						+ "where bd_re_ref = ? and bd_re_seq > ?";
-			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,  ref);
-			pstmt.setInt(2,  seq);
-			pstmt.executeQuery();
-			
-			conn.commit();
 
-			return bdController.TRUE;
-			
-			} catch(Exception e) {
-				System.out.println(" - - - - - - 댓글 seq 값 증가 DAO 오류 - - - - - - - ");
-				e.printStackTrace();
-			} return bdController.FALSE; 	
-	}
-	
 	// - - - - - - - - 댓글 가져오기 !! - - - - - - - - //
 	
 

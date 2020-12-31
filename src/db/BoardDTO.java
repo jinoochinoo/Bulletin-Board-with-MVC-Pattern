@@ -14,7 +14,14 @@ public class BoardDTO {
 	private int bd_re_seq;
 	private int bd_cnt;
 	private Date bd_date;
+	private int bd_parent;
 	
+	public int getBd_parent() {
+		return bd_parent;
+	}
+	public void setBd_parent(int bd_parent) {
+		this.bd_parent = bd_parent;
+	}
 	public int getBd_num() {
 		return bd_num;
 	}

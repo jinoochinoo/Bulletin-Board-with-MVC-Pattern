@@ -23,12 +23,10 @@
 	
 	<h1 class="text-center"><span class="badge badge-secondary">답글 작성</span></h1>
 	
-<form action="boardPutAction.board" method="post" enctype="multipart/form-data">
+<form action="boardPutAction.board" method="post">
 <input type="hidden" name="bd_id" value="<%=session.getAttribute("userID")%>">
-<input type="hidden" name="bd_num" value="<%=session.getAttribute("dto.bd_num")%>">
-<input type="hidden" name="bd_re_ref" value="<%=session.getAttribute("dto.bd_re_ref")%>">
-<input type="hidden" name="bd_re_lev" value="<%=session.getAttribute("dto.bd_re_lev")%>">
-<input type="hidden" name="bd_re_seq" value="<%=session.getAttribute("dto.bd_re_seq")%>">
+<input type="hidden" name="bd_num" value="${dto.bd_num}">
+<input type="hidden" name="bd_re_ref" value="${dto.bd_re_ref}">
 
 <table class="container col-lg-7">
 
@@ -41,13 +39,6 @@
 			placeholder="내용을 입력해주세요" required 
 		></textarea>
 	</td></tr>
-
-	<tr class="form-control" align="center">
-		<td id="title">파일첨부 &nbsp </td>
-		<td>
-		<input type="file" name="bdFile"/>
-		</td>
-	</tr>
 
 	<tr class="text-center"><td>
 	<input type="submit" class="btn btn-primary mb-3" value="등록">

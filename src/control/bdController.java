@@ -159,10 +159,9 @@ public class bdController extends HttpServlet {
 		// / / / / / / / / / / / / / / / / / / 답글 작성  / / / / / / / / / / / / / / / / / 
 		
 		else if(URI.equals("boardPutAction.board")) {
-			System.out.println("최초 컨트롤러 도착");
+
 			command = new boardPutAction(request);
 			int result = command.execute();
-			System.out.println("컨트롤러 마지막 부분");
 			if(result == bdController.TRUE) {
 				page = "/boardList.board";
 			} else {

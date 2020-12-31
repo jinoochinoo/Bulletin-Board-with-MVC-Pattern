@@ -37,7 +37,6 @@ public class boardReplyAction implements Command{
 		// 가장 최근 답글이 상위에 노출되게 답글 순서 seq + 1
 		dto.setBd_re_ref(ref);
 		dto.setBd_re_seq(seq);
-		dao.updateReSeq(dto);
 		
 		// 답글 저장
 		dto.setBd_num(dao.setSeq()); // 댓글 번호 seq 값 새로 가져와 세팅
