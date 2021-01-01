@@ -30,30 +30,14 @@ td {
 			location.href = "boardPut.jsp";
 		}
 	}
-		var httpRequest = null;
+	
+	function cmntReplyOpen(cmnt_num){
+
+			window.name = "parentForm";
+			window.open("CmntReplyForm.cmnt?num="+cmnt_num, 
+								  	"replyForm", "width=570, heigh=350, resizable = no, scrollbars = no");
 		
-		// httpRequest 객체 생성
-		function getXMLHttpRequest(){
-			var httpRequest = null;
-			
-			if(window.ActiveXObject){
-				try{
-					httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
-				} catch(e){
-					try{
-						httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-					} catch(e2){ httpRequest = null; }
-				}
-			}
-		else if(window.XMLHttpRequest){
-			httpRequest = new window.XMLHttpRequest();
-		}
-		return httpRequest;
-		}
-	
-	// 댓글 등록
-	
-	
+	}
 </script>
 </head>
 <body>
@@ -95,34 +79,35 @@ td {
 	<!-- 댓글 부분 -->
 
 	<div>
-		<c:forEach var="reply" items="${sessionScope.reply}">
+
+		<c:forEach var="reply" items="${sessionScope.cmntList}">
 			<div class="container col-lg-8 input-group">
+
 				<div class="form-control">
-					<c:forEach begin="1" end="${reply.bd_re_lev}"> &nbsp;  &nbsp; </c:forEach>
-					${reply.bd_content}<font size="2"  color="lightgray" style="display: inline-block; width: 95%; text-align: right;">04-16</font>
+					<c:forEach begin="1" end="${reply.cmnt_level}"> &nbsp;  &nbsp; </c:forEach>
+					${reply.cmnt_content}
 				</div>
 				<div class="input-group-prpend">
-					<span class="input-group-text"  style="display: inline-block; width: 95%; text-align: center;">${reply.bd_id}	</span>
+					<span class="input-group-text"  style="display: inline-block; width: 95%; text-align: center;">${reply.cmnt_id}	 &nbsp; 	<font size="2"  color="lightgray" style="display: inline-block; width: 95%; text-align: left;">${reply.cmnt_date}</font></span>
 				</div>
-
-	<!-- 				<span class="input-group-text" style="display: inline-block; width: 95%; text-align: center; height:33px;">  -->
 
 				<div class="input-group-prpend">
 				<c:if test="${sessionScope.userID != null}">
-				<a href="#" class="badge badge-dark">&nbsp; 답변</a>
+				<a href="#" class="badge badge-dark" onclick="cmntReplyOpen(${reply.cmnt_num})">&nbsp; 답변</a>
 				</c:if>
 				<!-- 댓글 작성자만 수정, 삭제 가능 (추후 추가) -->
-				<c:if test="${sessionScope.userID == reply.bd_id}">
+				<c:if test="${sessionScope.userID == reply.cmnt_id}">
 				<a href="#" class="badge badge-light">&nbsp; 수정</a>
 				<a href="#" class="badge badge-info">&nbsp; 삭제</a>
 				</c:if>
+
 				</div>
 			</div>
 		</c:forEach>
 	</div>
 
 	<br />
-
+	<form action="CmntWriteAction.cmnt" method="post">
 	<c:if test="${sessionScope.userID != null}">
 
 		<!-- 댓글 작성시 같이 넘겨줄 정보 -->
@@ -132,15 +117,17 @@ td {
 		<c:if test="${sessionScope.userID != null}">
 			<div class="container col-lg-7 mt-2 input-group">
 				<input type="text" class="form-control" placeholder="댓글"
-					name="bd_re_content"
+					name="cmnt_content"
 				>
 				<div class="input-group-append">
-					<button class="badge badge-success" onclick="writeCmnt()">작성</button>
+					<button class="badge badge-success" type="submit" >작성</button>
 				</div>
 			</div>
 		</c:if>
 		
 	</c:if>
+	
+	</form>
 	<br />
 	<table class="container col-lg-7">
 		<tr class="text-center">

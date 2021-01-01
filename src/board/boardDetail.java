@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import cmnt.CmntDAO;
+import cmnt.CmntDTO;
 import control.Command;
 import control.Controller;
 import db.BoardDAO;
@@ -32,14 +34,18 @@ public class boardDetail implements Command{
 		boolean result = dao.updateCnt(bd_num);
 		
 		// reply 정보 DB 처리해서 배열에 담기
-		ArrayList<BoardDTO> reply = dao.getReplyList(dto);
+		CmntDAO cmntDAO = new CmntDAO();
+		ArrayList<CmntDTO> cmntList = cmntDAO.getCmntList(bd_num);
 		
-		// 상세보기 때 사용할 dto, 되돌리기 때 필요한 pageNum 세션에 저장
+		// 댓글이 있으면 session 부분에 cmntList 세팅
 		HttpSession session = request.getSession();
-		session.setAttribute("dto", dto);
+		if(cmntList.size() > 0) {
+			session.setAttribute("cmntList", cmntList);			
+		}
 		session.setAttribute("pageNum", pageNum);
-		session.setAttribute("reply", reply);
-		
+		session.setAttribute("bd_num",bd_num);
+		session.setAttribute("dto", dto);
+
 		if(result) {
 			return Controller.TRUE;
 		} else {

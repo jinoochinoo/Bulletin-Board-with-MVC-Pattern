@@ -117,10 +117,8 @@ public class BoardDAO {
 			
 			// 글목록 전체 보여줄 때
 			if(opt == null) {
-				//bd_re_ref(그룹번호) 내림차순 정렬 후 
-				//bd_re_seq(답변글 순서) 오름차순 정렬 후
-				//글 10개 한 화면에 보여주도록 쿼리 설정
-				
+
+				//글 10개 한 화면에 보여주도록 쿼리 설정				
 				String sql = "select * from "
 						+ "(select rownum as rnum, data.* from "
 						+ "(select level, bd_num, bd_id, bd_title, bd_content, bd_file, "
@@ -128,7 +126,7 @@ public class BoardDAO {
 						+ "MVC_board_board "
 						+ "start with bd_parent = 0 "
 						+ "connect by prior bd_num = bd_parent "
-						+ "order SIBLINGS BY bd_re_ref desc) "
+						+ "order SIBLINGS BY bd_re_ref desc, bd_num desc) "
 						+ "data) "
 						+ "where rnum >= ? and rnum <= ?";
 				
