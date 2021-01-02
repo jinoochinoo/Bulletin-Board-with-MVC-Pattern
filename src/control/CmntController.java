@@ -72,15 +72,15 @@ public class CmntController extends HttpServlet {
 		
 		else if(URI.equals("CmntReplyAction.cmnt")) {
 			
-			System.out.println(" 컨트롤러 도착");
-			command = new CmntReplyAction(request);
-			int result = command.execute();
+			command = new CmntReplyAction(request, response);
+			command.execute();
+			return;
 			
-			if(result == Controller.TRUE) {
-				page = "/boardList.board";
-			} else {
-				page = "/exception/exception.jsp";
-			}
+	//		if(result == Controller.TRUE) {
+	//			page = "/boardList.board";
+	//		} else {
+	//			page = "/exception/exception.jsp";
+	//		}
 		}
 		
 		

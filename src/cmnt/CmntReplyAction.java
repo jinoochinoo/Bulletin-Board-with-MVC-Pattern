@@ -1,6 +1,10 @@
 package cmnt;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import control.Command;
 import control.Controller;
@@ -8,13 +12,16 @@ import control.Controller;
 public class CmntReplyAction implements Command{
 
 	HttpServletRequest request;
+	HttpServletResponse response;
 	
-	public CmntReplyAction(HttpServletRequest request) {
-		// TODO Auto-generated constructor stub
+	public CmntReplyAction(HttpServletRequest request, HttpServletResponse response) {
+		this.request = request;
+		this.response = response;
 	}
 	
 	@Override
 	public int execute() {
+	
 		
 		// 파라미터 호출
 		int cmnt_num = Integer.parseInt(request.getParameter("cmnt_num"));
@@ -33,7 +40,26 @@ public class CmntReplyAction implements Command{
 		
 		int result = dao.insertCmnt(dto);
 		
-		return Controller.TRUE;
+		try {
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			
+			// 정상적으로 댓글 저장했으면 1 전달
+			if(result == Controller.TRUE) {
+				out.println("0");
+			} else {
+				System.out.println(" - - - result 값 오류 터짐 - - - - ");
+				out.println("1");
+			}
+			
+			out.close();
+			
+		} catch (IOException e) {
+			System.out.println(" - - - - getWrtier 호출 실패 - - - - - ");
+			e.printStackTrace();
+		}
+		
+		return result;
 		
 	}
 

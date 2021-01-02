@@ -426,8 +426,7 @@ public class BoardDAO {
 		 boolean result = false;
 		 
 		 try { // bd_num 통해 re_ref 넘버 조회 후 게시글과 댓글 한꺼번에 삭제
-			 String sql = "delete from MVC_board_board where bd_re_ref = ("
-			 		+ "select bd_re_ref from MVC_board_board where bd_num = ?)";
+			 String sql = "delete from MVC_board_board where bd_num = ?";
 			 
 			 pstmt = conn.prepareStatement(sql);
 			 pstmt.setInt(1, bd_num);

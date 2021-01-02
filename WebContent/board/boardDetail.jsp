@@ -31,10 +31,10 @@ td {
 		}
 	}
 	
-	function cmntReplyOpen(cmnt_num){
+	function cmntReplyOpen(cmnt_num, pageNum){
 
 			window.name = "parentForm";
-			window.open("CmntReplyForm.cmnt?num="+cmnt_num, 
+			window.open("CmntReplyForm.cmnt?num="+cmnt_num+"&pageNum="+pageNum, 
 								  	"replyForm", "width=570, heigh=350, resizable = no, scrollbars = no");
 		
 	}
@@ -66,7 +66,7 @@ td {
 			</tr>
 
 			<tr class="form-control" align="center">
-				<td id="title">첨부&nbsp; &nbsp;파일 &nbsp; &nbsp;</td>
+				<td id="title">첨부 &nbsp;파일 &nbsp; &nbsp;</td>
 				<td>
 					<a href='FileDownload.board?file_name=${dto.bd_file}'>${dto.bd_file}</a>
 				</td>
@@ -84,7 +84,12 @@ td {
 			<div class="container col-lg-8 input-group">
 
 				<div class="form-control">
-					<c:forEach begin="1" end="${reply.cmnt_level}"> &nbsp;  &nbsp; </c:forEach>
+					<c:if test="${reply.cmnt_level > 1}">
+						<c:forEach begin="1" end="${reply.cmnt_level}">	&nbsp;&nbsp; </c:forEach>
+							<img src="../images/reply_icon.gif">
+					</c:if>
+				
+			<!-- 		<c:forEach begin="1" end="${reply.cmnt_level}"> &nbsp;  &nbsp; </c:forEach> -->
 					${reply.cmnt_content}
 				</div>
 				<div class="input-group-prpend">
@@ -93,7 +98,7 @@ td {
 
 				<div class="input-group-prpend">
 				<c:if test="${sessionScope.userID != null}">
-				<a href="#" class="badge badge-dark" onclick="cmntReplyOpen(${reply.cmnt_num})">&nbsp; 답변</a>
+				<a href="#" class="badge badge-dark" onclick="cmntReplyOpen(${reply.cmnt_num}, ${sessionScope.pageNum})">&nbsp; 답변</a>
 				</c:if>
 				<!-- 댓글 작성자만 수정, 삭제 가능 (추후 추가) -->
 				<c:if test="${sessionScope.userID == reply.cmnt_id}">
@@ -120,7 +125,7 @@ td {
 					name="cmnt_content"
 				>
 				<div class="input-group-append">
-					<button class="badge badge-success" type="submit" >작성</button>
+					<button class="badge badge-success" type="submit">작성</button>
 				</div>
 			</div>
 		</c:if>

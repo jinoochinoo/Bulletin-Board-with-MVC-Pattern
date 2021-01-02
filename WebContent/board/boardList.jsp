@@ -59,7 +59,7 @@
 								<c:forEach begin="1" end="${board.bd_re_lev}">
 								&nbsp;&nbsp; <!--  답변글 앞에 공백 추가 -->
 								</c:forEach>
-								Re : 
+								<img src="../images/reply_icon.gif">
 							</c:if>
 							<a
 								href="BoardDetail.board?num=${board.bd_num}&pageNum=${startPage}"

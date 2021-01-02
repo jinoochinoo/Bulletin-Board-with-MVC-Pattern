@@ -109,7 +109,7 @@ public class CmntDAO {
 						+ "cmnt_parent, cmnt_content from MVC_board_comment "
 						+ "where cmnt_bd = ? "
 						+ "start with cmnt_parent = 0 "
-						+ "connect by prior cmnt_num = cmnt_parent";
+						+ "connect by prior cmnt_num = cmnt_parent ";
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1,  bd_num);
