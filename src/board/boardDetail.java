@@ -37,11 +37,10 @@ public class boardDetail implements Command{
 		CmntDAO cmntDAO = new CmntDAO();
 		ArrayList<CmntDTO> cmntList = cmntDAO.getCmntList(bd_num);
 		
-		// 댓글이 있으면 session 부분에 cmntList 세팅
+		// session 부분에 cmntList 세팅
 		HttpSession session = request.getSession();
-		if(cmntList.size() > 0) {
-			session.setAttribute("cmntList", cmntList);			
-		}
+		
+		session.setAttribute("cmntList", cmntList);
 		session.setAttribute("pageNum", pageNum);
 		session.setAttribute("bd_num",bd_num);
 		session.setAttribute("dto", dto);

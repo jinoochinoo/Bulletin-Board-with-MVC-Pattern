@@ -1,7 +1,6 @@
 package control;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,8 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cmnt.CmntDeleteAction;
 import cmnt.CmntReplyAction;
 import cmnt.CmntReplyForm;
+import cmnt.CmntUpdateAction;
+import cmnt.CmntUpdateForm;
 import cmnt.CmntWriteAction;
 
 
@@ -18,8 +20,7 @@ import cmnt.CmntWriteAction;
 public class CmntController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-    private HashMap<String, Command> commandMap;
-	
+
 	public CmntController(){
 		super();
 	}
@@ -49,16 +50,12 @@ public class CmntController extends HttpServlet {
 		// / / / / / / / / / / / / / / 댓글 작성 / / / / / / / / / / / //		
 		if(URI.equals("CmntWriteAction.cmnt")) {
 			
-			command = new CmntWriteAction(request);
-			int result = command.execute();
-			
-			if(result == Controller.TRUE) {
-				page = "/boardList.board";
-			} else {
-				page = "/exception/exception.jsp";
-			}
+			command = new CmntWriteAction(request, response);
+			command.execute();
+			return;
 		}
 		
+		// / / / / / / / / / / / / / / 대댓글창 띄우기 / / / / / / / / / / / //	
 		else if(URI.equals("CmntReplyForm.cmnt")) {
 			command = new CmntReplyForm(request);
 			int result = command.execute();
@@ -70,20 +67,41 @@ public class CmntController extends HttpServlet {
 			}
 		}
 		
+		// / / / / / / / / / / / / / / 대댓글 작성 / / / / / / / / / / / //	
 		else if(URI.equals("CmntReplyAction.cmnt")) {
 			
 			command = new CmntReplyAction(request, response);
 			command.execute();
 			return;
-			
-	//		if(result == Controller.TRUE) {
-	//			page = "/boardList.board";
-	//		} else {
-	//			page = "/exception/exception.jsp";
-	//		}
 		}
 		
+		// / / / / / / / / / / / / / / 댓글 삭제 / / / / / / / / / / / //	
+		else if(URI.equals("CmntDeleteAction.cmnt")) {
+			
+			command = new CmntDeleteAction(request, response);
+			command.execute();
+			return;
+		}
 		
+		// / / / / / / / / / / / / / / 댓글 수정 화면 띄우기 / / / / / / / / / / / //	
+		else if(URI.equals("CmntUpdateForm.cmnt")) {
+			command = new CmntUpdateForm(request);
+			int result = command.execute();
+			
+			if(result == Controller.TRUE) {
+				page = "/board/CmntUpdateForm.jsp";
+			} else {
+				page = "/exception/exception.jsp";
+			}
+		}
+		
+		// / / / / / / / / / / / / / / 댓글 수정 / / / / / / / / / / / //	
+		else if(URI.equals("CmntUpdateAction.cmnt")) {
+			
+			command = new CmntUpdateAction(request, response);
+			command.execute();
+			return;
+		}
 		// 나머지 URI 모두 첫화면으로 전송
 		else {
 			page = "/main.jsp";

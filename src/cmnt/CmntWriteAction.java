@@ -1,9 +1,10 @@
 package cmnt;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
 import control.Command;
 import control.Controller;
@@ -11,9 +12,11 @@ import control.Controller;
 public class CmntWriteAction implements Command{
 
 	HttpServletRequest request;
+	HttpServletResponse response;
 	
-	public CmntWriteAction(HttpServletRequest request) {
+	public CmntWriteAction(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
+		this.response = response;
 	}
 	
 	@Override
@@ -33,6 +36,22 @@ public class CmntWriteAction implements Command{
 		dto.setCmnt_content(cmnt_content);
 		
 		int result = dao.insertCmnt(dto);
+		
+		// 결과값 전송
+		try {
+			response.setCharacterEncoding("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			
+			// 정상적으로 댓글 저장됐으면 0 전달
+			if(result == Controller.TRUE) {
+				out.println("0");
+			} else {
+				out.println("1");
+			}
+			} catch(IOException e) {
+				System.out.println(" - - - - getWrtier 호출 실패 - - - - - ");
+				e.printStackTrace();
+			}
 		
 		return result;
 	}

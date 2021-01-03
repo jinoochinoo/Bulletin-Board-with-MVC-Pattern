@@ -109,7 +109,7 @@ public class CmntDAO {
 						+ "cmnt_parent, cmnt_content from MVC_board_comment "
 						+ "where cmnt_bd = ? "
 						+ "start with cmnt_parent = 0 "
-						+ "connect by prior cmnt_num = cmnt_parent ";
+						+ "connect by prior cmnt_num = cmnt_parent";
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1,  bd_num);
@@ -165,6 +165,57 @@ public class CmntDAO {
 			} 
 			dbClose();
 			return cmnt;
+		}
+		
+		//  / / / / //   댓글 삭제	//  / / / / //   
+		public int deleteCmnt(int cmnt_num) {
+			int result = 0;
+			
+			try {
+				String sql = "delete from MVC_board_comment where cmnt_num in "
+						+ "(select cmnt_num from MVC_board_comment "
+						+ "start with cmnt_num = ? "
+						+ "connect by prior cmnt_num = cmnt_parent)";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1,  cmnt_num);
+				
+				int flag = pstmt.executeUpdate();
+				if(flag > 0) {
+					result = Controller.TRUE;
+					conn.commit();
+				}
+			} catch(Exception e) {
+				System.out.println(" - - - - - - 댓글 삭제 DAO 오류  - - - - - -");
+				result = Controller.FALSE;
+				e.printStackTrace();
+			} return result;
+		}
+		
+		//  / / / / //   댓글 수정 		//  / / / / //  
+		
+		public int updateCmnt(CmntDTO dto) {
+			int result = 0;
+			
+			try {
+				String sql = "update MVC_board_comment set cmnt_content = ? where cmnt_num = ?";
+					
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, dto.getCmnt_content());
+				pstmt.setInt(2, dto.getCmnt_num());
+				
+				int flag = pstmt.executeUpdate();
+				if(flag > 0) {
+					result = Controller.TRUE;
+					conn.commit();
+				} else {
+					result = Controller.FALSE;
+				}
+				
+			} catch(Exception e) {
+				System.out.println(" - - - - 댓글 수정 오류 DAO - - - - - ");
+				e.printStackTrace();
+			} return result;
 		}
 		
 		// DB 해제

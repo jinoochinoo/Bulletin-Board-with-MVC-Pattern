@@ -35,9 +35,94 @@ td {
 
 			window.name = "parentForm";
 			window.open("CmntReplyForm.cmnt?num="+cmnt_num+"&pageNum="+pageNum, 
-								  	"replyForm", "width=570, heigh=350, resizable = no, scrollbars = no");
-		
+								  	"replyForm", "width=570, heigh=350, resizable = no, scrollbars = no");	
 	}
+    
+	function cmntUpdateOpen(cmnt_num, pageNum){
+		
+		window.name = "parentForm";
+		window.open("CmntUpdateForm.cmnt?num="+cmnt_num+"&pageNum="+pageNum, 
+		  	"updateForm", "width=570, heigh=350, resizable = no, scrollbars = no");
+	}
+	
+    // httpRequest 객체 생성
+    function getXMLHttpRequest(){
+        var httpRequest = null;
+    
+        if(window.ActiveXObject){
+            try{
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");    
+            } catch(e) {
+                try{
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e2) { httpRequest = null; }
+            }
+        }
+        else if(window.XMLHttpRequest){
+            httpRequest = new window.XMLHttpRequest();
+        }
+        return httpRequest;    
+    }
+	
+	function checkCmnt(){
+				
+		// form 지정
+		var form = document.forms["cmntForm"];
+		// 전송할 값 변수 설정
+		var cmnt_bd = ${dto.bd_num};
+		var cmnt_id = "${sessionScope.userID}";
+		var pageNum= ${sessionScope.pageNum};
+		var cmnt_content = form.cmnt_content.value
+		
+		var param = "cmnt_bd="+cmnt_bd+"&cmnt_id="+cmnt_id+"&cmnt_content="+cmnt_content;
+		console.log(param);
+		
+		if(!cmnt_content){
+			alert("내용을 입력하세요!");
+			return false;
+		} else{
+			var param = "cmnt_bd="+cmnt_bd+"&cmnt_id="+cmnt_id+"&cmnt_content="+cmnt_content;
+			console.log(param);
+			
+			httpRequest = getXMLHttpRequest();
+			httpRequest.onreadystatechange = checkFunc;
+			httpRequest.open("POST", "CmntWriteAction.cmnt", true);
+			httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8'); 
+			httpRequest.send(param);
+		}
+	}
+	
+    function checkFunc(){
+        if(httpRequest.readyState == 4){
+            // 결과값을 가져온다.
+            var resultText = httpRequest.responseText;
+            if(resultText == 0){
+                // 새로고침
+                //window.opener.document.location.reload(); 메소드 제대로 안 먹길래 직접 url 작성해서 href 방식으로 넘김
+                    var url = "BoardDetail.board?num="+${dto.bd_num}+"&pageNum="+${sessionScope.pageNum}
+                  	location.href = url;
+                }
+            }
+        }
+    
+    function cmntDeleteOpen(cmnt_num){
+    	var msg = confirm("댓글 삭제하시겠습니까?");
+    	if(msg == true){
+    		deleteCmnt(cmnt_num);
+    	} else{
+    		return false;
+    	}
+   }
+    
+    function deleteCmnt(cmnt_num){
+    	var param = "cmnt_num="+cmnt_num;
+    	
+		httpRequest = getXMLHttpRequest();
+    	httpRequest.onreadystatechange = checkFunc;
+    	httpRequest.open("POST", "CmntDeleteAction.cmnt", true);
+    	httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8'); 
+    	httpRequest.send(param);
+    }
 </script>
 </head>
 <body>
@@ -102,8 +187,8 @@ td {
 				</c:if>
 				<!-- 댓글 작성자만 수정, 삭제 가능 (추후 추가) -->
 				<c:if test="${sessionScope.userID == reply.cmnt_id}">
-				<a href="#" class="badge badge-light">&nbsp; 수정</a>
-				<a href="#" class="badge badge-info">&nbsp; 삭제</a>
+				<a href="#" class="badge badge-light" onclick="cmntUpdateOpen(${reply.cmnt_num}, ${sessionScope.pageNum})">&nbsp; 수정</a>
+				<a href="#" class="badge badge-info" onclick="cmntDeleteOpen(${reply.cmnt_num})">&nbsp; 삭제</a>
 				</c:if>
 
 				</div>
@@ -112,7 +197,7 @@ td {
 	</div>
 
 	<br />
-	<form action="CmntWriteAction.cmnt" method="post">
+	<form name="cmntForm">
 	<c:if test="${sessionScope.userID != null}">
 
 		<!-- 댓글 작성시 같이 넘겨줄 정보 -->
@@ -122,10 +207,10 @@ td {
 		<c:if test="${sessionScope.userID != null}">
 			<div class="container col-lg-7 mt-2 input-group">
 				<input type="text" class="form-control" placeholder="댓글"
-					name="cmnt_content"
+					name="cmnt_content" 
 				>
 				<div class="input-group-append">
-					<button class="badge badge-success" type="submit">작성</button>
+					<input class="btn btn-success mb-4" type="button" value="작성" onclick="checkCmnt()">
 				</div>
 			</div>
 		</c:if>

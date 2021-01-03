@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-    <title> 댓글 답변 </title>
+    <title> 댓글 수정 </title>
     
     <style type="text/css">
         #wrap {
@@ -47,10 +47,7 @@
             var form = document.forms[0];
             // 전송할 값을 변수에 담는다.    
             var comment_num = "${cmnt.cmnt_num}";
-            var comment_board = "${cmnt.cmnt_bd}";
-            var comment_id = "${sessionScope.userID}";
             var comment_content = form.cmnt_content.value
-            
             var pageNum = "${sessionScope.pageNum}";
             
             if(!comment_content)
@@ -59,12 +56,11 @@
                 return false;
             }
             else{
-                var param="cmnt_num="+comment_num+"&cmnt_bd="+comment_board
-                                +"&cmnt_id="+comment_id+"&cmnt_content="+comment_content;
+                var param="cmnt_num="+comment_num+"&cmnt_content="+comment_content;
  
                 httpRequest = getXMLHttpRequest();
                 httpRequest.onreadystatechange = checkFunc;
-                httpRequest.open("POST", "CmntReplyAction.cmnt", true);    
+                httpRequest.open("POST", "CmntUpdateAction.cmnt", true);    
                 httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8'); 
                 httpRequest.send(param);
             }
@@ -97,16 +93,14 @@
 	<jsp:include page="../layout/topLayout.jsp" flush="false" />
 	<br />
     
-    	<h1 class="text-center"><span class="badge badge-secondary">대댓글 작성</span></h1>
+    	<h1 class="text-center"><span class="badge badge-secondary">대댓글 수정</span></h1>
 	
 <form name="replyInfo" target="parentForm">
 
 <table class="container col-lg-7">
 
 	<tr><td>
-		<textarea class="form-control text-center" rows="5" name="cmnt_content"
-			placeholder="대댓글 내용을 입력해주세요" required 
-		></textarea>
+		<textarea class="form-control text-center" rows="5" name="cmnt_content">${cmnt.cmnt_content}</textarea>
 	</td></tr>
 
 	<tr class="text-center"><td>
