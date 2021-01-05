@@ -7,6 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <title>JINWOO's MVC Board</title>
+<script type="text/javascript">
+</script>
 </head>
 <body>
 
@@ -18,14 +20,14 @@
 		<h2>회원가입</h2>
 		<div class="row">
 			<div class="container col-lg-6">
-				<form action="signUpAction.user" method="post">
+				<form action="signUpAction.user" method="post" name="userInfo">
 
 					<div class="input-group mt-3 mb-1">
 						<div class="input-group-prpend">
 							<span class="input-group-text">아이디</span>
 						</div>
 						<input type="text" name="userID" class="form-control"
-							placeholder="아이디를 입력하세요" required
+							placeholder="아이디를 입력하세요"  required
 						>
 					</div>
 
