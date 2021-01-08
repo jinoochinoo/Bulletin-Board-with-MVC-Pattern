@@ -27,7 +27,7 @@
 navbar navbar-expand-sm bg-light justify-content-center"
 	>
 		<!-- Brand/logo -->
-		<a class="navbar-brand" href="#"> <img src="C:\Users\user\eclipse-workspace\MVC_Board\WebContent\images\jinwoo.png"
+		<a class="navbar-brand" href=".user"> <img src="C:\Users\user\eclipse-workspace\MVC_Board\WebContent\images\jinwoo.png"
 			alt="logo" style="width: 40px;">
 		</a>
 		<%
@@ -39,7 +39,7 @@ navbar navbar-expand-sm bg-light justify-content-center"
 		%>
 		<!-- 로그인 후 Links -->
 		<ul class="navbar-nav">
-			<li class="nav-item"><a class="nav-link" href="dfdf">소개</a></li>
+			<li class="nav-item"><a class="nav-link" href="intro.user">소개</a></li>
 			<li class="nav-item"><a class="nav-link" href="boardList.board">게시판</a></li>
 			<li class="nav-item"><a class="nav-link" href="userInfo.user">회원정보</a></li>
 			<li class="nav-item"><a class="nav-link" href="logout.user">로그아웃</a></li>
@@ -52,7 +52,7 @@ navbar navbar-expand-sm bg-light justify-content-center"
 
 		<!--  로그인 전 Links -->
 		<ul class="navbar-nav">
-			<li class="nav-item"><a class="nav-link" href="dfdf">소개</a></li>
+			<li class="nav-item"><a class="nav-link" href="intro.user">소개</a></li>
 			<li class="nav-item"><a class="nav-link" href="boardList.board">게시판</a></li>
 			<li class="nav-item"><a class="nav-link" href="login.user">로그인</a></li>
 			<li class="nav-item"><a class="nav-link" href="signUp.user">회원가입</a></li>

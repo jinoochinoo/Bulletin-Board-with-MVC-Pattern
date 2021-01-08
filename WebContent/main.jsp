@@ -1,4 +1,4 @@
-<%@page import="java.io.PrintWriter" %>
+<%@page import="java.io.PrintWriter"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"
 %>
@@ -14,41 +14,32 @@
 	<!-- top 레이아웃 삽입 -->
 	<jsp:include page="layout/topLayout.jsp" flush="false" />
 	<br />
-	
-	
-	<div class="container" style="margin-top: 30px">
-		<div class="row">
-			<div class="col-sm-4">
-				<h3>Some Links</h3>
-				<p>GitHub & Youtube URL for Portfolio</p>
-				<ul class="nav nav-pills flex-column">
-					<li class="nav-item"><a class="nav-link active" href="https://github.com/jinoochinoo">https://github.com/jinoochinoo</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" href="#">Youtube</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Disable</a></li>
-				</ul>
-				<hr class="d-sm-none">
-			</div>
 
-
-	<div class="col-sm-8">
+	<!-- 메인 페이지 영역 시작 -->
+	<div class="container">
+		<div class="jumbotron">
 			<div class="container">
-				<div class="jumbotron">
-				  <h1 class="text-center">MVC 패턴 게시판</h1>
-					  <h1 class="text-center mt-4">CRUD 기능만 구현한 <small>기본형 게시판</small></h1>
-					  <h2 class="text-center">Model, Controller 부분은 <small>오라클, 서블릿!</small></h2>
-					  <h3 class="text-center">View, 이미지 부분은 <small>부트스트랩, 자바스크립트!</small></h3>
-					  <h4 class="text-center">자세한 제작 과정은 <small>소개 메뉴에서 확인해주쎄요!</small></h4>
-					  
-				</div>
+				<h1 style="text-align: center;"><strong>JSP 게시판 소개</strong></h1>
+				<p class="text-center">JSP 게시판입니다.</p>
+				<p class="text-center">DB 연결은 ORACLE, JDBC 이용해서 제작했습니다.</p>
+				<p class="text-center">디자인 템플릿은 부트스트랩을 사용했고, javascript·css 부분은 인터넷에서 상당 부분 참고했습니다.</p>
+				<p class="text-center">게시판 구현에 필요한 로직을 이해하고 익히기에 좋은 시간이었습니다.</p>
+				<p class="text-center">감사합니다.</p>
+				
 			</div>
 		</div>
 	</div>
-</div>
-			
-			<br />
-			<!-- bottom 레이아웃 삽입 -->
-			<jsp:include page="layout/bottomLayout.jsp" flush="false" />
-			
+
+	<table class="container col-lg-7">
+		<tr class="text-center">
+			<td>
+				<a style="text-align: center;"class="btn btn-primary btn-pull text-center" href="intro.user" role="button">자세히 알아보기</a>
+			</td>
+		</tr>
+	</table>
+
+		<br />
+		<!-- bottom 레이아웃 삽입 -->
+		<jsp:include page="layout/bottomLayout.jsp" flush="false" />
 </body>
 </html>

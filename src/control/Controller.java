@@ -62,7 +62,12 @@ public class Controller extends HttpServlet {
 		if(URI.equals("login.user")) {
 			page = "/user/login.jsp";
 		}
-
+		
+		// 소개 화면
+		else if(URI.equals("intro.user")) {
+			page = "/intro.jsp";
+		}
+		
 		// 회원가입 화면
 		else if(URI.equals("signUp.user")){
 			page = "/user/signUp.jsp";
