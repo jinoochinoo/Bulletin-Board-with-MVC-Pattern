@@ -65,15 +65,16 @@
 						</select>
 					</div>
 
-					<div class="input-group mt-1 mb-1">
-						<div class="input-group-prpend">
-							<span class="input-group-text">성별</span>
+						<div class="form-group" style="text-align: center; margin:0 auto;">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-info active">
+									<input type="radio" name="gender" autocomplete="off" value="male" checked>남자
+								</label>
+								<label class="btn btn-info">
+									<input type="radio" name="gender" autocomplete="off" value="female">여자
+								</label>
+							</div>
 						</div>
-
-						<input type="radio" name="gender" value="male" class="form-control col-lg-3" checked><h4>남자</h4>
-						<input type="radio" name="gender" value="female" class="form-control col-lg-3" checked><h4>여자</h4>
-	
-					</div>
 
 					<button type="submit" class="btn btn-primary form-control">회원가입</button>
 				</form>
