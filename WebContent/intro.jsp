@@ -20,24 +20,24 @@
 				<h2 class="text-center">About Me</h2>
 				<div class="text-center">
 					<img
-						src="C:\Users\user\eclipse-workspace\MVC_Board\WebContent\images\jinwoo.png"
+						src="https://avatars2.githubusercontent.com/u/73393147?s=460&u=a8db6559fd9b52d0dfc7bfd220431e305502873e&v=4"
 						style="width: 200px;"
 					>
 				</div>
 				<br/>
-				<h5 class="btn btn-outline-warning btn-lg btn-block"><strong>URL 이력서</strong></h5>
+				<h5 class="btn btn-outline-warning btn-lg btn-block"><strong>사용한 기술 스택</strong></h5>
 				<ul class="nav nav-pills flex-column">
 
-					<li class="nav-item text-center"><a class="nav-link" href="https://korean.kw.ac.kr/">국어국문학과, 영어영문학과 졸업</a>
+					<li class="nav-item text-center"><span class="nav-link">JSP 게시판 MVC 모델로 구현</span>
 					</li><br/>
 
-					<li class="nav-item text-center"><a class="nav-link active" href="https://www.ekn.kr/web/view.php?key=423166">기자로 일했던 2년 1개월</a>
+					<li class="nav-item text-center"><span class="nav-link active">Oracle 이용해 게시물, 댓글 DB 저장</span>
 					</li><br/>
 	
-					<li class="nav-item text-center"><a class="nav-link" href="http://www.poongin.co.kr/">짧았던 패션회사 해외영업 인턴</a>
+					<li class="nav-item text-center"><span class="nav-link">JQuery 통한 비동기 통신 추가</span>
 					</li><br/>
 	
-					<li class="nav-item text-center"><a class="nav-link active" href="https://github.com/jinoochinoo">개발자가 되기 위한 my GitHub</a>
+					<li class="nav-item text-center"><span class="nav-link active">View 부분은 부트스트랩 이용해 스타일링</span>
 					</li>
 					</ul>
 					<hr class="d-sm-none">
@@ -46,18 +46,18 @@
 				<h4 class="text-center"><strong>에러, 디버깅, 그리고 해결...!</strong></h4>
 				<br/>
 				
-				<h4 class="bg-primary text-white">MVC 모델1, 모델2 방식 섞어서 구현하기</h4>
+				<h4 class="bg-primary text-white">세션 그대로 두면 큰일!</h4>
 
 				<p>애초 Ajax 통해 로그인, 회원가입 과정에서 경고창 띄우는 방식으로
 				아이디 중복체크, 비밀번호 체크 하려했지만 컨트롤러 데이터 전송 과정에서 막힘.
 				</p>
 				<p>
-				Spring 이용하면 구현 가능했지만 이해하지 못한 채 사용하는 게 싫어서 java 파일,
-				즉 서버 쪽에서 오류 검사해 결과값만 session 통해 뷰로 전달하기로 결정.
+				인터넷에서 코드 찾아서 따라치는 식으로 이해하지 못한 코드를 사용하는 게 싫어서 
+				java 파일, 즉 서버 쪽에서 오류 검사해 결과값만 session 통해 뷰로 전달하기로 결정.
 				</p>
 				<p>
 				이 방식으로 세션 사용할 경우, 바로바로 invaliate() 해줘야 함. 세션 해제 안했다가
-			    오류 계속 발생해서 살짝 당황 ;;; Msg 등록한 세션은 실행 이후 즉각 해제되도록 설정!
+			    오류 계속 발생해서 살짝 당황;;; Msg 등록한 세션은 실행 이후 즉각 해제되도록 설정!
 				</p>
 				<br>
 
@@ -84,8 +84,13 @@
 				</p>
 				<p>
 				다른 폴더에서 실행될 때마다 새로 주소값 설정해야 하는 게 꽤 번거로운 작업. 해결책 찾던 중
-				절대 주소값(C:드라이브부터 파일까지 경로) 전부 붙여넣기. 코드가 길어졌지만 엑박 문제 해결.
+				절대 주소값(C:드라이브부터 파일까지 경로) 전부 붙여넣기. 코드가 길어졌지만 엑박 문제 일단락.
 				</p>
+				<p>  
+				"Not allowed to load local resource"
+				크롬에서 외부 리소스 차단해 에러 발생. GitHub 프로필 사진 소스를 이용하는 것으로 또 다시 변경
+				</p>
+				
 				<br>
 				
 				<h4 class="bg-danger text-white">회원정보 수정 중 SQL 오류 발생</h4>
@@ -97,7 +102,7 @@
 				"인출 시퀀스가 틀립니다", "SQL 부적절합니다"
 				</p>
 				<p>
-				뭐가 문제일지 한참 고민하다가 update SQL 명령문은 select 쿼리랑 다르게 따로 저장될 ㄱ ㅔ 없다란
+				뭐가 문제일지 한참 고민하다가 update SQL 명령문은 select 쿼리랑 다르게 따로 저장될 게 없다란
 				기본 중의 기본적인 사실을 인지. rs.next() 메소드 지우고 바로 dto 객체에 request.getParameter 값
 				넣으니 정상 작동.
 				</p>
