@@ -18,22 +18,34 @@
 	<!-- 메인 페이지 영역 시작 -->
 	<div class="container">
 		<div class="jumbotron">
-			<div class="container">
-				<h1 style="text-align: center;"><strong>JSP 게시판 소개</strong></h1>
-				<p class="text-center">JSP 게시판입니다.</p>
-				<p class="text-center">DB 연결은 ORACLE, JDBC 이용해서 제작했습니다.</p>
-				<p class="text-center">디자인 템플릿은 부트스트랩을 사용했고, javascript·css 부분은 인터넷에서 상당 부분 참고했습니다.</p>
-				<p class="text-center">게시판 구현에 필요한 로직을 이해하고 익히기에 좋은 시간이었습니다.</p>
-				<p class="text-center">감사합니다.</p>
+
+				<table class="table" style="text-align: center;" >
+					<thead>
+					<tr>
+						<th colspan="2" ><h2 style="text-align: center;"><strong>Front-End</strong></h2></th>
+						<th colspan="3" ><h2 style="text-align: center;"><strong>Back-End</strong></h2></th>						
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+
+						<td colspan="1" ><img src="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2370C63B5694884912" width=100 height=100></td>
+						<td colspan="1" ><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1200px-Bootstrap_logo.svg.png" width=100 height=100></td>					
+						<td colspan="1" ><img src="https://perfectacle.github.io/images/Java-study-014day/thumb.png" width=100 height=100></td>
+						<td colspan="1" ><img src="https://javatutorial.net/wp-content/uploads/2016/06/servlet-featured-image-1280x720.png" width=100 height=100></td>
+						<td colspan="1" ><img src="https://t1.daumcdn.net/cfile/tistory/9912DA485AD6EF041E" width=100 height=100></td>					
 				
-			</div>
+					</tr>
+					</tbody>
+				</table>
+
 		</div>
 	</div>
 
 	<table class="container col-lg-7">
 		<tr class="text-center">
 			<td>
-				<a style="text-align: center;"class="btn btn-primary btn-pull text-center" href="intro.user" role="button">자세히 알아보기</a>
+				<a style="text-align: center;"class="btn btn-danger btn-pull text-center" href="https://github.com/jinoochinoo/JSP-MVC-BOARD" role="button">GitHub 소스코드</a>
 			</td>
 		</tr>
 	</table>
