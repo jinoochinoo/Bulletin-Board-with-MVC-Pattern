@@ -12,13 +12,22 @@
 <!--  부트스트랩 참조 -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-	
+  <style>
+  .type1 {width: 100%;
+    height: 100%;
+
+}
+  .type2 {top: 50%; position: relative; text-align: center;}
+  </style>
 </head>
 <body>
 
-	<div class="jumbotron text-center" style="margin-bottom: 0">
-		<h1>My First Bulletin Board with MVC Pattern</h1>
-		<h5>Thanks to visit and share your precious time!</h5>
+	<div class="type1"
+	style="background-image: 
+	url(https://t1.daumcdn.net/cfile/tistory/997015505F51EA5618); height: 200px;">
+		<div class="type2">
+	<h1 style="color: #FFE400;"><STRONG style="color: #FFFFFF;">JSP Bulletin Board</STRONG>(feat. MVC Pattern)</h1>
+		</div>
 	</div>
 
 
